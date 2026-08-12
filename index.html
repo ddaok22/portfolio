@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WECRUIT · AX 포트폴리오</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root {
+    --bg: #FFFFFF; --fg: #09090B; --muted: #71717A; --faint: #A1A1AA;
+    --border: #E7E7EA; --border2: #D9D9DE; --subtle: #F7F7F8; --hover: #F2F2F3;
+    --card: #FFFFFF; --primary: #18181B; --on-primary: #FAFAFA;
+    --verify: #10B981; --hire: #3B82F6; --exit: #F59E0B; --culture: #8B5CF6;
+    --c-kw: #E11D48; --c-fn: #7C3AED; --c-num: #2563EB;
+    --shadow: 0 1px 2px rgba(0,0,0,.05); --shadow2: 0 4px 22px -8px rgba(0,0,0,.12), 0 2px 6px -3px rgba(0,0,0,.06);
+    --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #27272A; --fg: #FAFAFA; --muted: #A7A7AE; --faint: #7C7C84;
+    --border: #3B3B42; --border2: #4F4F57; --subtle: #2F2F34; --hover: #37373C;
+    --card: #303035; --primary: #FAFAFA; --on-primary: #27272A;
+    --verify: #34D399; --hire: #60A5FA; --exit: #FBBF24; --culture: #A78BFA;
+    --c-kw: #FB7185; --c-fn: #C4B5FD; --c-num: #93C5FD;
+    --shadow: 0 1px 2px rgba(0,0,0,.4); --shadow2: 0 6px 26px -8px rgba(0,0,0,.5), 0 2px 6px -3px rgba(0,0,0,.4);
+  }}
+  :root[data-theme="dark"] {
+    --bg: #27272A; --fg: #FAFAFA; --muted: #A7A7AE; --faint: #7C7C84;
+    --border: #3B3B42; --border2: #4F4F57; --subtle: #2F2F34; --hover: #37373C;
+    --card: #303035; --primary: #FAFAFA; --on-primary: #27272A;
+    --verify: #34D399; --hire: #60A5FA; --exit: #FBBF24; --culture: #A78BFA;
+    --c-kw: #FB7185; --c-fn: #C4B5FD; --c-num: #93C5FD;
+    --shadow: 0 1px 2px rgba(0,0,0,.4); --shadow2: 0 6px 26px -8px rgba(0,0,0,.5), 0 2px 6px -3px rgba(0,0,0,.4);
+  }
+  :root.hc { --faint: #5f5f66; --muted: #3f3f46; --border: #c2c2c8; --border2: #a9a9b1; }
+  @media (prefers-color-scheme: dark) { :root.hc:not([data-theme="light"]) { --faint: #b6b6be; --muted: #d2d2d9; --border: #4c4c55; --border2: #63636d; } }
+  :root.hc[data-theme="dark"] { --faint: #b6b6be; --muted: #d2d2d9; --border: #4c4c55; --border2: #63636d; }
+  :root.hc[data-theme="light"] { --faint: #5f5f66; --muted: #3f3f46; --border: #c2c2c8; --border2: #a9a9b1; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; } @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; -webkit-font-smoothing: antialiased; line-height: 1.65; letter-spacing: -0.02em; }
+  a { color: inherit; text-decoration: none; } button { font-family: inherit; } svg { display: block; }
+  ::selection { background: color-mix(in srgb, var(--fg) 14%, transparent); }
+  :focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; border-radius: 4px; }
+
+  /* ── 앱 셸 ── */
+  .app { display: flex; align-items: stretch; min-height: 100vh; }
+  .side { position: sticky; top: 0; align-self: flex-start; height: 100vh; width: 260px; flex-shrink: 0; display: flex; flex-direction: column; border-right: 1px solid var(--border); background: var(--bg); transition: width .18s ease; }
+  .side.collapsed { width: 64px; }
+  .side-head { display: flex; align-items: center; height: 56px; padding: 0 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .collapse { width: 32px; height: 32px; border-radius: 7px; border: 0; background: none; color: var(--muted); display: grid; place-items: center; cursor: pointer; flex-shrink: 0; transition: background .12s, color .12s; }
+  .collapse:hover { background: var(--hover); color: var(--fg); }
+  .side:not(.collapsed) .collapse { background: var(--subtle); color: var(--fg); }
+  .side:not(.collapsed) .collapse:hover { background: var(--hover); }
+  .side.collapsed .side-head { justify-content: flex-start; }
+  .side-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
+  .side-nav .grp + .grp { margin-top: 22px; }
+  .side-nav .lbl { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em; color: var(--faint); padding: 0 10px 8px; }
+  .side.collapsed .side-nav .lbl { opacity: 0; height: 8px; }
+  .side-nav a { display: flex; align-items: center; gap: 11px; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; color: var(--muted); white-space: nowrap; transition: background .1s, color .1s; }
+  .side-nav a:hover { background: var(--hover); color: var(--fg); }
+  .side-nav a.on { background: var(--subtle); color: var(--fg); font-weight: 600; }
+  .side-nav a svg { width: 17px; height: 17px; flex-shrink: 0; color: var(--faint); }
+  .side-nav a.on svg { color: var(--fg); }
+  .side-nav a .tx { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .side-nav a .no { color: var(--faint); font-size: 11px; font-weight: 700; }
+  .side-nav a.dim { color: var(--faint); }
+  .side.collapsed .side-nav a { width: 32px; height: 32px; padding: 0; justify-content: center; }
+  .side.collapsed .side-nav a .tx, .side.collapsed .side-nav a .no { display: none; }
+
+  .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .topbar { position: sticky; top: 0; z-index: 30; height: 56px; display: flex; align-items: center; gap: 12px; padding: 0 26px; border-bottom: 1px solid color-mix(in srgb, var(--border) 65%, transparent); background: color-mix(in srgb, var(--bg) 58%, transparent); backdrop-filter: saturate(1.8) blur(20px); -webkit-backdrop-filter: saturate(1.8) blur(20px); }
+  .menu { display: none; width: 34px; height: 34px; border-radius: 8px; border: 0; background: none; color: var(--muted); place-items: center; cursor: pointer; }
+  .crumb { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted); min-width: 0; }
+  .crumb b { color: var(--fg); font-weight: 600; } .crumb .sep { color: var(--faint); } .crumb .cur { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .spacer { flex: 1; }
+  .icobtn { width: 34px; height: 34px; border-radius: 8px; border: 0; background: none; color: var(--muted); display: grid; place-items: center; cursor: pointer; transition: background .12s, color .12s; }
+  .icobtn:hover { background: var(--hover); color: var(--fg); }
+  .ic-sun { display: none; } .ic-moon { display: block; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ic-sun { display: block; } :root:not([data-theme="light"]) .ic-moon { display: none; } }
+  :root[data-theme="dark"] .ic-sun { display: block; } :root[data-theme="dark"] .ic-moon { display: none; }
+  :root[data-theme="light"] .ic-sun { display: none; } :root[data-theme="light"] .ic-moon { display: block; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; border: 0; cursor: pointer; transition: opacity .12s; }
+  .btn:hover { opacity: .88; } .btn.ghost { background: none; border: 1px solid var(--border); color: var(--fg); }
+  .mnav { display: none; width: 34px; height: 34px; border-radius: 8px; border: 0; background: none; color: var(--muted); place-items: center; cursor: pointer; margin-left: -6px; }
+  .mnav:hover { color: var(--fg); }
+  .sbackdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 55; }
+
+  .layout { --fs: 1; --g: 24px; flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, calc(640px * var(--fs))) 240px; justify-content: center; gap: 48px; padding: 0 40px; }
+  .content { min-width: 0; padding: 46px 0 120px; }
+  .toc { position: sticky; top: 56px; align-self: start; height: calc(100vh - 56px); overflow-y: auto; padding: 48px 0 30px; }
+  .toc .lbl { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 12px; }
+  .toc a { display: block; font-size: 13px; color: var(--muted); padding: 5px 0 5px 12px; border-left: 2px solid transparent; transition: color .1s, border-color .1s; }
+  .toc a:hover { color: var(--fg); } .toc a.on { color: var(--fg); font-weight: 500; border-left-color: var(--fg); }
+  .promo { margin-top: 26px; border: 1px solid var(--border); border-radius: 12px; background: var(--subtle); padding: 16px; }
+  .promo h4 { margin: 0 0 7px; font-size: 14px; font-weight: 700; letter-spacing: -.01em; line-height: 1.35; }
+  .promo p { margin: 0 0 13px; font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* ── 문서 ── */
+  .doc { display: none; } .doc.on { display: block; }
+  .doc-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; font-variant-numeric: tabular-nums; }
+  .eyebrow b { color: inherit; font-weight: 800; font-size: 13px; }
+  .doc h1 { margin: 0; font-size: 38px; font-weight: 800; letter-spacing: -.035em; line-height: 1.08; text-wrap: balance; }
+  .doc .desc { margin: 13px 0 0; font-size: 16.5px; color: var(--muted); line-height: 1.55; }
+  .doc-tools { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+  .tbtn { height: 34px; padding: 0 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--muted); font-size: 13px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: color .12s, border-color .12s; }
+  .tbtn.sq { width: 34px; padding: 0; justify-content: center; }
+  .tbtn:hover { color: var(--fg); border-color: var(--border2); }
+
+  .kws { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+  .kw { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 4px 11px 4px 9px; border-radius: 999px; border: 1px solid var(--border); color: var(--fg); background: var(--subtle); }
+  .kw svg { width: 12px; height: 12px; color: var(--verify); flex-shrink: 0; }
+  .kw.verify { color: var(--verify); border-color: color-mix(in srgb, var(--verify) 30%, transparent); background: color-mix(in srgb, var(--verify) 9%, transparent); }
+  .kw.hire { color: var(--hire); border-color: color-mix(in srgb, var(--hire) 30%, transparent); background: color-mix(in srgb, var(--hire) 9%, transparent); }
+
+  h2.sec { margin: 52px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -.02em; scroll-margin-top: 78px; padding-top: 28px; border-top: 1px solid var(--border); }
+  .lead { margin: 16px 0 0; font-size: 15.5px; line-height: 1.72; color: color-mix(in srgb, var(--fg) 82%, var(--muted)); }
+  .lead + .lead { margin-top: 13px; } .lead strong { color: var(--fg); font-weight: 650; }
+  .lead .pn { font-weight: 700; color: var(--faint); font-size: 13px; margin-right: 9px; font-variant-numeric: tabular-nums; }
+
+  /* 텍스트 블록: 제목 → 텍스트 (깔끔, 무장식) */
+  .item { margin-top: 26px; }
+  .item .h { display: flex; align-items: baseline; gap: 10px; }
+  .item .n { font-size: 13px; font-weight: 700; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .item .h b { font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
+  .item p { margin: 8px 0 0; color: var(--muted); font-size: 14.5px; line-height: 1.72; }
+  .item p strong { color: var(--fg); font-weight: 650; }
+  .item .eg { margin: 11px 0 0; padding: 12px 15px; border: 1px solid var(--border); border-radius: 10px; background: var(--subtle); font-size: 13px; color: var(--muted); line-height: 1.62; }
+
+  .kpis { margin: 20px 0 0; display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .stat { border: 1px solid var(--border); border-radius: 12px; background: var(--card); padding: 17px 18px; }
+  .stat .l { font-size: 12.5px; color: var(--muted); } .stat .v { margin-top: 7px; font-size: 23px; font-weight: 760; letter-spacing: -.03em; }
+  .stat .v .a { color: var(--faint); font-weight: 500; margin: 0 5px; } .stat .s { margin-top: 6px; font-size: 11.5px; color: var(--faint); line-height: 1.5; }
+
+  /* 목업(제품 화면) · 각 꼭지 1개 */
+  .shot { margin-top: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: var(--shadow2); overflow: hidden; }
+  .shot .bar { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px; border-bottom: 1px solid var(--border); background: var(--subtle); }
+  .shot .bar .dts { display: flex; gap: 6px; } .shot .bar .dts i { width: 10px; height: 10px; border-radius: 50%; display: block; background: var(--border2); }
+  .shot .bar .tt { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .shot .stage { padding: 22px; }
+  .cap { margin-top: 12px; font-size: 12.5px; color: var(--faint); text-align: center; }
+
+  .win { border: 1px solid var(--border); border-radius: 12px; background: var(--bg); overflow: hidden; }
+  .wtop { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--border); }
+  .wtop .wt { font-weight: 650; font-size: 13px; }
+  .wbody { padding: 16px; }
+  .seg { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--border); border-radius: 9px; background: var(--subtle); flex-wrap: wrap; }
+  .seg span { font-size: 12px; padding: 5px 12px; border-radius: 6px; color: var(--muted); }
+  .seg span.on { background: var(--bg); color: var(--fg); font-weight: 600; box-shadow: var(--shadow); }
+  .uicard { border: 1px solid var(--border); border-radius: 10px; background: var(--bg); padding: 14px 15px; }
+  .uirow { display: flex; align-items: center; gap: 10px; }
+  .field { flex: 1; height: 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); display: flex; align-items: center; padding: 0 12px; font-size: 13px; }
+  .field.big { font-weight: 650; font-size: 14px; } .field.mut { color: var(--faint); font-weight: 400; font-size: 12.5px; }
+  .sel { height: 36px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); display: inline-flex; align-items: center; gap: 8px; padding: 0 12px; font-size: 12.5px; color: var(--muted); white-space: nowrap; } .sel svg { color: var(--faint); }
+  .pill { height: 31px; padding: 0 13px; border-radius: 8px; background: var(--primary); color: var(--on-primary); font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+  .pill.ghost { background: var(--bg); border: 1px solid var(--border); color: var(--fg); }
+  .opt { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); padding: 5px 0; }
+  .opt .rad { width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid var(--border2); flex-shrink: 0; } .opt .x { margin-left: auto; color: var(--faint); } .opt .add { color: var(--faint); }
+  .lrow { display: flex; align-items: center; gap: 11px; padding: 11px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); } .lrow + .lrow { margin-top: 8px; }
+  .lrow .cdot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; } .lrow .nm { flex: 1; font-size: 13px; font-weight: 600; } .lrow .meta { font-size: 11px; color: var(--faint); }
+  .bdg { font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; }
+  .bdg.ok { color: var(--verify); background: color-mix(in srgb,var(--verify) 12%,transparent); }
+  .ranklist { display: grid; gap: 8px; }
+  .rankcard { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); }
+  .rankcard .rk { width: 16px; text-align: center; font-weight: 800; color: var(--muted); font-size: 12.5px; } .rankcard .nm { flex: 1; font-size: 13px; font-weight: 600; }
+  .rankcard.top { border-color: color-mix(in srgb, var(--verify) 40%, transparent); } .rankcard.top .bdg { color: var(--verify); background: color-mix(in srgb, var(--verify) 12%, transparent); }
+  .rankcard.bot { border-color: color-mix(in srgb, var(--exit) 40%, transparent); } .rankcard.bot .bdg { color: var(--exit); background: color-mix(in srgb, var(--exit) 14%, transparent); }
+  .grip { color: var(--faint); font-size: 11px; }
+  .recq { font-size: 15px; font-weight: 650; margin-bottom: 14px; }
+  .qhint { font-size: 11.5px; font-weight: 600; color: var(--faint); margin-left: 6px; }
+  .barsopt { display: grid; gap: 8px; }
+  .bo { display: flex; align-items: center; gap: 11px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; color: var(--muted); background: var(--bg); }
+  .bo .rad { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid var(--border2); flex-shrink: 0; position: relative; }
+  .bo.on { border-color: var(--verify); color: var(--fg); background: color-mix(in srgb,var(--verify) 7%,transparent); }
+  .bo.on .rad { border-color: var(--verify); }
+  .bo.on .rad::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--verify); }
+  .rankgap { text-align: center; color: var(--faint); font-size: 13px; letter-spacing: 3px; padding: 1px 0; }
+  .recbtns { display: flex; gap: 8px; flex-wrap: wrap; } .recbtns b { height: 40px; padding: 0 17px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg); font-size: 12.5px; font-weight: 600; color: var(--muted); display: inline-flex; align-items: center; }
+  .recbtns b.on { border-color: var(--verify); color: var(--verify); background: color-mix(in srgb,var(--verify) 9%,transparent); }
+  .caseblk { border: 1px solid var(--border); border-radius: 10px; background: var(--bg); padding: 12px 14px; } .caseblk + .caseblk { margin-top: 10px; }
+  .caseblk .ch { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 650; } .caseblk .ta { margin-top: 8px; min-height: 44px; border: 1px dashed var(--border2); border-radius: 8px; padding: 9px 11px; font-size: 12px; color: var(--faint); }
+  .life { display: flex; justify-content: space-between; position: relative; margin-top: 4px; }
+  .life::before { content: ""; position: absolute; top: 6px; left: 8%; right: 8%; height: 2px; background: var(--border2); }
+  .life::after { content: ""; position: absolute; top: 6px; left: 8%; width: 58%; height: 2px; background: var(--hire); }
+  .life .stg { position: relative; z-index: 1; flex: 1; text-align: center; } .life .stg .d2 { width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid var(--border2); margin: 0 auto 9px; }
+  .life .stg.hot .d2 { border-color: var(--hire); background: var(--hire); } .life .stg .t2 { font-size: 11px; color: var(--muted); line-height: 1.35; } .life .stg.hot .t2 { color: var(--fg); font-weight: 600; }
+  .codepane { font-family: var(--mono); font-size: 12.5px; line-height: 1.85; background: var(--subtle); border: 1px solid var(--border); border-radius: 10px; padding: 13px 15px; overflow-x: auto; }
+  .kw2 { color: var(--c-kw); } .fn2 { color: var(--c-fn); } .num2 { color: var(--c-num); } .com2 { color: var(--faint); }
+  .diff-a { color: var(--verify); display: block; } .diff-d { color: var(--exit); display: block; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+  .prev { border: 1px solid var(--border); border-radius: 10px; background: var(--bg); padding: 18px; display: grid; place-items: center; min-height: 90px; }
+  .ttab { width: 100%; border-collapse: collapse; font-size: 12.5px; } .ttab td { border-bottom: 1px solid var(--border); padding: 8px 4px; color: var(--muted); } .ttab tr:last-child td { border-bottom: 0; } .ttab td:first-child { color: var(--fg); font-weight: 600; } .ttab td:last-child { text-align: right; font-family: var(--mono); font-size: 11.5px; }
+  .pipe { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; }
+  .node { display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); font-weight: 650; font-size: 13.5px; box-shadow: var(--shadow); }
+  .node.dash { border-style: dashed; box-shadow: none; color: var(--muted); font-weight: 600; }
+  .node i { width: 8px; height: 8px; border-radius: 50%; } .pipe .ar { color: var(--faint); }
+  .barcmp { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .barcmp .t { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 12px; text-align: center; }
+  .bars { display: flex; align-items: flex-end; gap: 8px; height: 96px; padding: 0 6px; border-bottom: 1px solid var(--border); } .bars .b { flex: 1; border-radius: 4px 4px 0 0; background: var(--border2); } .bars.after .b { background: var(--fg); }
+  .barcmp .x { display: flex; gap: 8px; padding: 6px 6px 0; } .barcmp .x span { flex: 1; text-align: center; font-size: 10px; color: var(--faint); }
+
+  /* ── 가독성(접근성) ── */
+  .a11y { position: fixed; right: 24px; bottom: 24px; z-index: 70; display: flex; flex-direction: column; gap: 12px; }
+  .fab { width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--border); background: var(--card); color: var(--fg); box-shadow: var(--shadow2); cursor: pointer; font-weight: 700; font-size: 15px; display: grid; place-items: center; line-height: 1; transition: border-color .12s; }
+  .fab svg { width: 21px; height: 21px; } .fab:hover { border-color: var(--border2); }
+  .a11y-panel { position: absolute; bottom: 0; right: 56px; width: 236px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); box-shadow: var(--shadow2); padding: 8px; display: none; z-index: 71; }
+  .a11y-panel.open { display: block; }
+  .a11y-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 8px; }
+  .a11y-row + .a11y-row { border-top: 1px solid var(--border); }
+  .a11y-row .rl { font-size: 13px; color: var(--fg); }
+  .a11y-ctl { display: inline-flex; align-items: center; gap: 6px; }
+  .a11y-ctl button { width: 27px; height: 27px; border: 1px solid var(--border); border-radius: 7px; background: var(--bg); color: var(--muted); cursor: pointer; display: grid; place-items: center; font-size: 15px; line-height: 1; }
+  .a11y-ctl button:hover { color: var(--fg); border-color: var(--border2); }
+  .a11y-ctl .val { min-width: 40px; text-align: center; font-size: 11.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .a11y-reset { width: 100%; margin-top: 4px; height: 32px; border: 0; border-radius: 8px; background: var(--subtle); color: var(--muted); font-size: 12.5px; cursor: pointer; }
+  .a11y-reset:hover { color: var(--fg); }
+  .hcsw { width: 38px; height: 22px; border-radius: 999px; border: 1px solid var(--border2); background: var(--subtle); position: relative; cursor: pointer; padding: 0; flex-shrink: 0; }
+  .hcsw::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--muted); transition: left .15s, background .15s; }
+  .hcsw[aria-checked="true"] { background: var(--fg); border-color: var(--fg); }
+  .hcsw[aria-checked="true"]::after { left: 18px; background: var(--bg); }
+  /* 접근성 안내 말풍선 */
+  .a11y-hint { position: absolute; right: 58px; bottom: 1px; width: 210px; background: var(--fg); color: var(--bg); border-radius: 13px; padding: 11px 11px 11px 13px; font-size: 12.5px; line-height: 1.5; box-shadow: var(--shadow2); display: flex; gap: 8px; align-items: flex-start; animation: hintpop .32s cubic-bezier(.22,1,.36,1), hintfloat 2.6s ease-in-out 1.2s infinite; }
+  .a11y-hint::after { content: ""; position: absolute; right: -5px; bottom: 15px; width: 11px; height: 11px; background: var(--fg); transform: rotate(45deg); border-radius: 2px; }
+  .a11y-hint .hx { font-size: 15px; line-height: 1.15; }
+  .a11y-hint .tx2 { flex: 1; }
+  .a11y-hint .hclose { flex-shrink: 0; background: none; border: 0; color: var(--bg); opacity: .55; cursor: pointer; font-size: 12px; padding: 0 0 0 2px; line-height: 1.2; }
+  .a11y-hint .hclose:hover { opacity: 1; }
+  .a11y-hint.hide { display: none; }
+  @keyframes hintpop { from { opacity: 0; transform: translateX(8px) scale(.95); } to { opacity: 1; transform: none; } }
+  @keyframes hintfloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @media (prefers-reduced-motion: reduce) { .a11y-hint { animation: none; } }
+  /* 글자 크기 스케일 · 텍스트에만 적용(목업 px 고정), --fs는 .layout에서 상속 */
+  .content .eyebrow { font-size: calc(12px * var(--fs)); }
+  .content .doc h1 { font-size: calc(38px * var(--fs)); }
+  .content .doc .desc { font-size: calc(16.5px * var(--fs)); }
+  .content .lead { font-size: calc(15.5px * var(--fs)); }
+  .content h2.sec { font-size: calc(22px * var(--fs)); }
+  .content .item .h b { font-size: calc(16px * var(--fs)); }
+  .content .item p { font-size: calc(14.5px * var(--fs)); }
+  .content .item .eg { font-size: calc(13px * var(--fs)); }
+  .content .shot { letter-spacing: normal; }
+  .content .shot, .content .kpis { line-height: 1.5; }
+
+  /* 문제 정의 도식 */
+  .fig { margin-top: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); overflow: hidden; }
+  .fig .fbody { padding: 26px 22px; }
+  .fig .fcap { border-top: 1px solid var(--border); padding: 11px 16px; font-size: 12.5px; color: var(--faint); text-align: center; }
+  .hbar { display: flex; align-items: center; gap: 16px; max-width: 520px; margin: 0 auto; } .hbar + .hbar { margin-top: 13px; }
+  .hbar .hl { width: 68px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
+  .hbar .ht { flex: 1; height: 12px; border-radius: 6px; background: var(--subtle); overflow: hidden; }
+  .hbar .hf { display: block; height: 100%; border-radius: 6px; background: var(--border2); }
+  .hbar .hv { width: 88px; text-align: right; font-size: 13px; font-weight: 700; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .dists { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 480px; margin: 0 auto; }
+  .dist .dt { font-size: 12px; color: var(--muted); text-align: center; margin-bottom: 12px; }
+  .dbars { display: flex; align-items: flex-end; gap: 8px; height: 74px; border-bottom: 1px solid var(--border); } .dbars span { flex: 1; border-radius: 4px 4px 0 0; background: var(--border2); display: block; }
+  .dxlab { display: flex; gap: 8px; margin-top: 7px; } .dxlab span { flex: 1; text-align: center; font-size: 10px; color: var(--faint); }
+  /* 역량 스펙트럼 */
+  .spec { display: grid; gap: 9px; }
+  .spechead { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin: 0 0 3px; padding-left: 82px; }
+  .specrow { display: grid; grid-template-columns: 70px 1fr; align-items: center; gap: 12px; }
+  .specrow .sl { font-size: 12px; color: var(--muted); text-align: right; }
+  .spectrack { position: relative; height: 8px; border-radius: 5px; background: linear-gradient(90deg, color-mix(in srgb,var(--verify) 32%, var(--subtle)), var(--subtle) 50%, color-mix(in srgb,var(--exit) 32%, var(--subtle))); }
+  .specdot { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 13px; height: 13px; border-radius: 50%; background: var(--fg); box-shadow: 0 0 0 3px var(--bg); }
+  /* 사전·사후 정합성 리포트 */
+  .leg { display: flex; gap: 18px; justify-content: center; font-size: 11.5px; color: var(--muted); margin-bottom: 16px; }
+  .leg i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; margin-right: 6px; }
+  .cmp { display: grid; gap: 9px; }
+  .cmp .row { display: grid; grid-template-columns: 82px 1fr; align-items: center; gap: 13px; }
+  .cmp .cl { font-size: 12px; color: var(--muted); text-align: right; }
+  .cmp .cbars { display: grid; gap: 4px; }
+  .cmp .cbar { height: 8px; border-radius: 5px; background: var(--subtle); position: relative; overflow: hidden; }
+  .cmp .cf { position: absolute; left: 0; top: 0; height: 100%; border-radius: 5px; }
+  .cmp .cf.pre { background: var(--border2); } .cmp .cf.post { background: var(--fg); }
+  .aip { margin-top: 16px; border: 1px solid var(--border); border-radius: 11px; background: var(--subtle); padding: 15px 17px; display: flex; align-items: center; gap: 18px; }
+  .aip .score { font-size: 30px; font-weight: 800; letter-spacing: -.03em; line-height: 1; flex-shrink: 0; }
+  .aip .atx { font-size: 12px; color: var(--muted); line-height: 1.6; } .aip .atx b { color: var(--fg); }
+  /* 결과 대비: 무의미 그래프 vs 실질 데이터 */
+  .vs { display: grid; grid-template-columns: 0.82fr 1.18fr; gap: 18px; }
+  .vspanel { border: 1px solid var(--border); border-radius: 12px; background: var(--bg); padding: 16px; display: flex; flex-direction: column; }
+  .vspanel .vt { font-size: 12px; font-weight: 600; color: var(--muted); text-align: center; margin-bottom: 6px; }
+  .radar { width: 168px; height: 168px; margin: 4px auto 0; display: block; }
+  .radar .ring { fill: none; stroke: var(--border); }
+  .radar .axis { stroke: var(--border); }
+  .radar .blob { fill: color-mix(in srgb, var(--exit) 16%, transparent); stroke: var(--exit); stroke-width: 1.5; }
+  .vsnote { margin-top: auto; padding-top: 12px; font-size: 11.5px; color: var(--exit); text-align: center; font-weight: 600; }
+  .res { display: grid; gap: 8px; align-content: start; }
+  .rgrouplabel { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-top: 2px; }
+  .ritem { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .ritem.s { border-color: color-mix(in srgb, var(--verify) 38%, transparent); }
+  .ritem.w { border-color: color-mix(in srgb, var(--exit) 38%, transparent); }
+  .rtop { display: flex; align-items: center; gap: 9px; }
+  .rrk { width: 20px; height: 20px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: var(--subtle); color: var(--muted); flex-shrink: 0; }
+  .ritem.s .rrk { background: color-mix(in srgb,var(--verify) 15%,transparent); color: var(--verify); }
+  .ritem.w .rrk { background: color-mix(in srgb,var(--exit) 15%,transparent); color: var(--exit); }
+  .rnm { font-size: 13px; font-weight: 650; flex: 1; }
+  .rtag { font-size: 10px; font-weight: 700; color: var(--faint); }
+  .rcase { margin-top: 7px; font-size: 11.5px; color: var(--muted); line-height: 1.55; border-left: 2px solid var(--border2); padding-left: 10px; }
+  .rcase .ai { font-size: 10px; font-weight: 700; color: var(--verify); margin-right: 5px; }
+  @media (max-width: 700px) { .vs { grid-template-columns: 1fr; } }
+
+  @media (max-width: 1023px) { .layout { grid-template-columns: minmax(0, calc(640px * var(--fs))); justify-content: center; gap: 0; padding: 0 24px; } .toc { display: none; } }
+  @media (max-width: 767px) {
+    .app { display: block; }
+    .side { position: fixed; z-index: 60; left: 0; top: 0; height: 100vh; width: 264px; transform: translateX(-100%); transition: transform .2s ease; box-shadow: var(--shadow2); }
+    .side.open { transform: none; }
+    .main { margin-left: 0; }
+    .mnav { display: grid; }
+    .app:has(.side.open) .sbackdrop { display: block; }
+    .layout { padding: 0 16px; --g: 16px; } .content { padding: 30px 0 80px; }
+    .kpis, .barcmp, .grid2, .vs { grid-template-columns: 1fr; } .doc h1 { font-size: 28px; }
+  }
+  /* 소개(개요) 페이지 */
+  .plist { display: grid; grid-template-columns: 1fr; gap: var(--g); margin-top: 16px; }
+  .pcard { border: 1px solid var(--border); border-radius: 14px; background: var(--card); padding: 16px 17px; }
+  .pch { display: flex; align-items: center; gap: 10px; }
+  .pico { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; flex-shrink: 0; }
+  .pico svg { width: 18px; height: 18px; }
+  .pcard .pch b { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+  .pcard p { margin: 9px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+  .pcard .ptag { margin: 11px 0 0; font-size: 13px; font-weight: 650; color: var(--fg); line-height: 1.55; }
+  .ptags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .ptags span { font-size: 11px; color: var(--muted); background: var(--subtle); border: 1px solid var(--border); border-radius: 999px; padding: 3px 9px; }
+  .pflag { margin-left: auto; font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--fg); color: var(--bg); flex-shrink: 0; }
+  .jlist { display: grid; gap: 10px; margin-top: 16px; }
+  .jcard { display: block; position: relative; border: 1px solid var(--border); border-radius: 12px; background: var(--card); padding: 15px 18px; cursor: pointer; transition: border-color .12s; }
+  .jcard:hover { border-color: var(--border2); }
+  .jcard .jn { font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--faint); }
+  .jcard b { display: block; margin-top: 4px; font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; }
+  .jcard p { margin: 5px 0 0; font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 88%; }
+  .jcard .jar { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); color: var(--faint); font-size: 18px; }
+  .jcard .jgo { display: inline-block; margin-top: 12px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+  .jcard:hover .jgo { color: var(--fg); }
+  /* 소개 · HR 라이프사이클 정합성 */
+  .lcx { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; position: relative; }
+  .lcx::before { content: ""; position: absolute; top: 7px; left: 12%; right: 12%; height: 2px; background: var(--border2); }
+  .lcstage { position: relative; text-align: center; }
+  .lcdot { position: relative; z-index: 1; display: block; width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 10px; box-shadow: 0 0 0 3px var(--card); }
+  .lcstage .lct { font-size: 11px; color: var(--faint); }
+  .lcstage .lcd { font-size: 12.5px; font-weight: 650; margin-top: 2px; }
+  .cmpflow { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .cnode { flex: 1; max-width: 200px; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; text-align: center; font-size: 11.5px; color: var(--muted); background: var(--bg); }
+  .cnode b { display: block; font-size: 13.5px; color: var(--fg); margin-top: 3px; }
+  .cnode.v { border-color: color-mix(in srgb, var(--verify) 45%, transparent); }
+  .cnode.h { border-color: color-mix(in srgb, var(--hire) 45%, transparent); }
+  .carrow { font-size: 11px; color: var(--muted); text-align: center; font-weight: 600; white-space: nowrap; line-height: 1.5; }
+  .ctx { margin-top: 11px; text-align: center; font-size: 12px; color: var(--culture); font-weight: 600; }
+  .hyps { margin-top: 13px; border-top: 1px solid var(--border); padding-top: 13px; }
+  .hcard { text-align: center; font-size: 13px; margin-bottom: 10px; }
+  .hrow { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--muted); padding: 9px 12px; border: 1px solid var(--border); border-radius: 9px; }
+  .hrow + .hrow { margin-top: 8px; } .hrow b { color: var(--fg); } .hrow span:last-child { flex: 1; }
+  .hb { font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; background: var(--subtle); color: var(--muted); flex-shrink: 0; }
+  /* 소개 · 경력 아크 */
+  .arc { display: grid; grid-template-columns: 1fr; gap: var(--g); margin-top: 16px; }
+  .astep { border: 1px solid var(--border); border-radius: 12px; background: var(--card); padding: 15px 16px; }
+  .astep.now { border-color: color-mix(in srgb, var(--fg) 32%, var(--border)); }
+  .astep .atop { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .astep .ay { font-size: 11px; font-weight: 700; letter-spacing: .05em; color: var(--faint); text-transform: uppercase; }
+  .arole { font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+  .arole.part { background: var(--subtle); color: var(--muted); border: 1px solid var(--border); }
+  .arole.lead2 { background: var(--fg); color: var(--bg); }
+  .astep.now .ay { color: var(--fg); }
+  .astep .ah { font-size: 15px; font-weight: 700; margin-top: 5px; letter-spacing: -.01em; }
+  .astep .ap { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin-top: 7px; }
+  @media (max-width: 640px) { .arc { grid-template-columns: 1fr; } }
+  /* 소개 · 핵심 강점 */
+  .strengths { display: grid; grid-template-columns: 1fr; gap: var(--g); margin-top: 16px; }
+  .scard { border: 1px solid var(--border); border-radius: 12px; background: var(--card); padding: 16px 17px; display: flex; flex-direction: column; }
+  .scard b { font-size: 14.5px; font-weight: 700; letter-spacing: -.01em; }
+  .scard p { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 7px 0 0; flex: 1; }
+  .smetric { align-self: flex-start; margin-top: 12px; font-size: 12px; font-weight: 700; color: var(--fg); background: var(--subtle); border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; }
+  @media (max-width: 640px) { .strengths { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .plist { grid-template-columns: 1fr; } .cmpflow { flex-direction: column; } .cnode { max-width: none; width: 100%; } }
+
+  /* ── PDF(인쇄) 전용 레이아웃 ── */
+  @media print {
+    @page { size: A4; margin: 14mm 13mm; }
+    :root, :root[data-theme="dark"], :root[data-theme="light"] {
+      --bg: #ffffff; --fg: #18181b; --muted: #52525b; --faint: #8a8a92;
+      --border: #e2e2e6; --border2: #cfd0d5; --subtle: #f5f5f6; --hover: #f0f0f1;
+      --card: #ffffff; --primary: #18181b; --on-primary: #ffffff;
+      --verify: #0f9d6b; --hire: #2f6fe0; --exit: #c98200; --culture: #7c53d6;
+      --shadow: none; --shadow2: none;
+    }
+    html, body { background: #fff !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important; }
+    .side, .topbar, .toc, .a11y, .menu { display: none !important; }
+    .app, .main { display: block !important; }
+    .layout { display: block !important; max-width: none; margin: 0; padding: 0; gap: 0; }
+    .content { padding: 0 !important; --fs: 1 !important; letter-spacing: normal !important; line-height: 1.6 !important; }
+    .doc { display: block !important; break-before: page; }
+    .doc:first-of-type { break-before: auto; }
+    .doc h1 { font-size: 26px; }
+    .doc .desc { font-size: 13.5px; }
+    .eyebrow { margin-bottom: 8px; }
+    h2.sec { break-after: avoid; break-inside: avoid; margin-top: 22px; padding-top: 16px; }
+    .item { margin-top: 15px; }
+    .item .h { break-after: avoid; }
+    .item p, .lead { orphans: 3; widows: 3; }
+    .shot, .fig, .win, .aip, .vspanel, .vs, .kpis, .stat, .callout, .barcmp, .dists,
+    .rankcard, .lrow, .ritem, .caseblk, .uicard, .cmp .row, .hbar, .pipe, .life, .grid2,
+    .ranklist, .barsopt, .bo, .radar { break-inside: avoid; }
+    .btn { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="side" id="side">
+    <div class="side-head">
+      <button class="collapse" id="collapseBtn" type="button" aria-label="사이드바 접기/펴기"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
+    </div>
+    <nav class="side-nav">
+      <div class="grp">
+        <div class="lbl">소개</div>
+        <a href="#" data-goto="0" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><span class="tx">포트폴리오 소개</span></a>
+      </div>
+      <div class="grp">
+        <div class="lbl">프로젝트</div>
+        <a href="#" data-goto="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg><span class="tx">확장형 진단 플랫폼</span><span class="no">01</span></a>
+        <a href="#" data-goto="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="14" width="3" height="4"/></svg><span class="tx">평가의 변별력을 높이다</span><span class="no">02</span></a>
+        <a href="#" data-goto="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.7 4.5L18 9.2l-4.3 1.7L12 15l-1.7-4.1L6 9.2l4.3-1.7z"/><path d="M18 15l.9 2.3L21 18l-2.1.7L18 21l-.9-2.3L15 18l2.1-.7z"/></svg><span class="tx">디자인–개발 AX</span><span class="no">03</span><!-- nav03 --></a>
+      </div>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="mnav" id="mnavBtn" type="button" aria-label="메뉴 열기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
+      <div class="crumb"><span class="cur" id="crumb">포트폴리오 소개</span></div>
+      <span class="spacer"></span>
+      <button class="btn" id="pdfBtn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>PDF</button>
+    </header>
+
+    <div class="layout">
+      <main class="content">
+
+        <!-- ============ DOC 0 · 소개 ============ -->
+        <article class="doc on" data-doc="0">
+          <div class="doc-top"><div>
+            <div class="eyebrow">OVERVIEW</div>
+            <h1>포트폴리오</h1>
+            <p class="desc">레퍼런스 체크를 시작으로 진단·분석 플랫폼까지 HR SaaS 제품을 확장해왔습니다.</p>
+          </div></div>
+
+          <h2 class="sec" id="d0-overview">소개</h2>
+          <p class="lead">기업이 인재를 채용하고, 검증하고, 관리하는 과정에서 발생하는 데이터를 수집·분석해 의사결정을 돕는 HR SaaS 서비스입니다.</p>
+          <p class="lead">기존에는 진단별로 제품이 분리되어 데이터가 단절되어 있었습니다. 이 포트폴리오에서는 흩어진 진단과 데이터를 하나의 경험으로 연결하고, 이를 확장해온 과정을 다룹니다.</p>
+
+          <h2 class="sec" id="d0-products">프로덕트</h2>
+          <p class="lead">채용부터 재직, 퇴직까지. 구성원과 조직을 다양한 관점에서 진단하고, 흩어진 데이터를 연결해 더 나은 인재 의사결정을 돕는 제품들을 만들었습니다.</p>
+          <div class="plist">
+            <div class="pcard">
+              <div class="pch"><span class="pico" style="color:var(--verify);background:color-mix(in srgb,var(--verify) 14%,transparent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 11l2 2 4-4"/><circle cx="9" cy="7" r="4"/><path d="M3 21v-1a5 5 0 0 1 5-5h3"/></svg></span><b>레퍼런스 체크</b></div>
+              <p class="ptag">함께 일한 동료의 관점에서 후보자를 확인합니다.</p>
+              <p>성과·협업·신뢰도 등 이력서만으로 확인하기 어려운 정보를 입사 전 동료 평가를 통해 파악합니다.</p>
+            </div>
+            <div class="pcard">
+              <div class="pch"><span class="pico" style="color:var(--hire);background:color-mix(in srgb,var(--hire) 14%,transparent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><b>다면 진단 · 360°</b></div>
+              <p class="ptag">상사·동료·부하·본인의 시선으로 역량을 입체적으로 진단합니다.</p>
+              <p>수습 적합성과 재직자의 역량을 다양한 평가자의 관점에서 확인합니다.</p>
+            </div>
+            <div class="pcard">
+              <div class="pch"><span class="pico" style="color:var(--culture);background:color-mix(in srgb,var(--culture) 14%,transparent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/></svg></span><b>조직문화 진단</b></div>
+              <p class="ptag">구성원의 목소리로 조직의 건강도를 확인합니다.</p>
+              <p>심리적 안전감·협업·성장 환경 등을 데이터로 수집해 조직의 강점과 개선점을 파악합니다.</p>
+            </div>
+            <div class="pcard">
+              <div class="pch"><span class="pico" style="color:var(--exit);background:color-mix(in srgb,var(--exit) 14%,transparent)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg></span><b>퇴직 리뷰</b></div>
+              <p class="ptag">퇴직자의 경험에서 조직을 개선할 단서를 찾습니다.</p>
+              <p>퇴직 인터뷰를 통해 이탈의 배경과 원인을 파악하고, 반복되는 문제를 발견합니다.</p>
+            </div>
+            <div class="pcard">
+              <div class="pch"><span class="pico" style="color:var(--fg);background:var(--subtle)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span><b>통합 진단 플랫폼</b><span class="pflag">통합 플랫폼</span></div>
+              <p class="ptag">흩어진 진단과 데이터를 하나의 경험으로 연결합니다.</p>
+              <p>입사 전 레퍼런스 체크부터 수습·재직 중 진단까지 데이터를 연결하고, 서로 다른 시점의 결과와 조직문화 데이터를 교차 분석할 수 있도록 확장했습니다.</p>
+            </div>
+          </div>
+
+          <h2 class="sec" id="d0-role">역할</h2>
+          <p class="lead"><strong>프로덕트 디자이너로서 초기 단계부터 제품을 리딩</strong>하며, 전화로만 이루어지던 레퍼런스 체크의 DX 전환부터 제품 확장과 플랫폼 통합, 최근의 AX 전환까지 제품이 성장하고 변화하는 전 과정을 함께했습니다.</p>
+          <div class="arc">
+            <div class="astep"><div class="ay">2019 · DX 전환</div><div class="ah">프로젝트 참여</div><div class="ap">전화 중심으로 이루어지던 레퍼런스 체크를 웹 기반 서비스로 전환하는 과정에 참여했습니다.</div></div>
+            <div class="astep"><div class="ay">2020–2024 · 제품 확장</div><div class="ah">제품 디자인 리딩</div><div class="ap">레퍼런스 체크를 시작으로 다면진단·조직문화·퇴직 리뷰로 제품을 확장하고, 입사 전부터 퇴사까지 이어지는 HR 라이프사이클로 연결했습니다.</div></div>
+            <div class="astep now"><div class="ay">최근 · AX 전환</div><div class="ah">제품 개발 방식 리딩</div><div class="ap">분리되어 있던 제품을 하나의 플랫폼으로 통합하고, AI 도구를 활용해 기획–디자인–개발 워크플로우를 재설계했습니다.</div></div>
+          </div>
+
+          <h2 class="sec" id="d0-why">다뤄온 문제의 범위</h2>
+          <p class="lead">0→1 제품 구축부터 플랫폼 통합, 데이터 고도화, AI를 활용한 제품 개발 방식의 변화까지.</p>
+          <div class="strengths">
+            <div class="scard"><b>B2B SaaS · DX</b><p>전화 중심의 레퍼런스 체크를 웹 서비스로 전환하며 B2B SaaS 제품의 0→1을 경험했습니다.</p></div>
+            <div class="scard"><b>플랫폼 통합·확장</b><p>분리되어 있던 진단 제품을 하나의 Core로 통합하고, HR 라이프사이클 전반으로 확장했습니다.</p></div>
+            <div class="scard"><b>데이터 기반 평가 설계</b><p>점수 중심 평가를 순위 기반 평가와 사례 연계 방식으로 전환해 변별력 있는 데이터를 설계했습니다.</p></div>
+            <div class="scard"><b>AI 기반 제품 개발</b><p>Figma·Cursor를 활용해 디자인–개발 워크플로우를 재설계하고 제품 검증 속도를 높였습니다.</p></div>
+          </div>
+
+          <h2 class="sec" id="d0-map">이 포트폴리오에서 다루는 것</h2>
+          <p class="lead">하나의 HR 서비스를 확장하며 마주한 세 가지 문제를 담았습니다. 제품을 확장하고, 데이터를 고도화하고, 제품을 만드는 방식까지 바꾼 과정을 프로젝트별로 소개합니다.</p>
+          <div class="jlist">
+            <a class="jcard" href="#" data-goto="1"><span class="jn">PROJECT 01</span><b>확장형 진단 플랫폼</b><p>진단 Core를 모듈화해 제품과 데이터를 확장할 수 있는 플랫폼을 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
+            <a class="jcard" href="#" data-goto="2"><span class="jn">PROJECT 02</span><b>평가의 변별력을 높이다</b><p>점수 중심 평가를 순위 기반으로 전환해 변별력 있는 평가 데이터를 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
+            <a class="jcard" href="#" data-goto="3"><span class="jn">PROJECT 03</span><b>디자인–개발 AX</b><p>AI 기반 워크플로우로 디자인–개발 사이의 반복 작업을 줄이고 제품 검증 속도를 높였습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
+          </div>
+        </article>
+
+        <!-- ============ DOC 1 ============ -->
+        <article class="doc" data-doc="1">
+          <div class="doc-top">
+            <div><div class="eyebrow">PROJECT <b>01</b></div><h1>확장형 진단 플랫폼</h1><p class="desc">진단 Core를 모듈화하고 데이터를 연결해, 새로운 진단과 BM으로 확장할 수 있는 플랫폼을 만들었습니다.</p></div>
+          </div>
+          <div class="kws"><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>기획~런칭 전 과정 주도</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>비즈니스와 UX의 균형 설계</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>플랫폼 구조 설계</span></div>
+
+          <h2 class="sec" id="d1-pain">문제 정의</h2>
+          <p class="lead">기존 제품은 레퍼런스 체크와 개별 진단에 머물러 있었고, 제품 확장과 데이터 연결을 가로막는 세 가지 구조적 한계가 있었습니다.</p>
+          <div class="item"><div class="h"><span class="n">01</span><b>단발성 제품 구조로 인한 확장의 한계</b></div><p>기존 제품은 레퍼런스 체크와 개별 진단에 머물러 있어, 한 인재의 입사 전부터 퇴사까지 이어지는 HR 라이프사이클로 제품을 확장하기 어려웠습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node">레퍼런스 체크</span><span class="ar">·</span><span class="node dash" style="opacity:.55">입사</span><span class="ar">·</span><span class="node dash" style="opacity:.55">근무</span><span class="ar">·</span><span class="node dash" style="opacity:.55">퇴사</span></div></div><div class="fcap">단발 진단 · 라이프사이클 한 지점에 고립</div></div></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>데이터 단절로 인한 진단 신뢰성 검증의 부재</b></div><p>입사 전 레퍼런스 체크와 입사 후 실제 동료들이 평가한 수습 기간 다면진단 결과가 서로 단절되어 있었습니다.</p><p>때문에 “입사 전 평가가 실제 입사 후 평가와도 일치하는가?”, “지인을 통한 긍정적 평가가 결과에 영향을 미치지는 않았는가?”와 같은 질문을 검증하기 어려웠고, 진단 문항과 결과 해석의 신뢰도를 지속적으로 검증·고도화할 피드백 루프도 만들기 어려웠습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node"><i style="background:var(--verify)"></i>입사 전 · 레퍼런스</span><span class="ar" style="color:var(--exit);font-weight:700">✕</span><span class="node"><i style="background:var(--hire)"></i>입사 후 · 다면진단</span></div></div><div class="fcap">두 데이터 단절 · 정합성 검증 불가</div></div></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>진단마다 반복되는 개발과 긴 출시 리드타임</b></div><p>질문지와 분석 보고서가 고정된 형태로 하드코딩되어 있어 새로운 진단이나 보고서 포맷을 추가할 때마다 개발이 필요했습니다.</p><p>그 결과 새로운 진단을 출시하는 데 6개월~1년의 개발 기간이 필요했고, 고객 역시 새로운 진단을 접할 때마다 별도의 학습과 적응이 필요했습니다.</p><div class="fig"><div class="fbody"><div class="hbar"><span class="hl">다면 진단</span><span class="ht"><span class="hf" style="width:88%"></span></span><span class="hv">6–12개월</span></div><div class="hbar"><span class="hl">조직문화</span><span class="ht"><span class="hf" style="width:100%"></span></span><span class="hv">6–12개월</span></div><div class="hbar"><span class="hl">퇴직 리뷰</span><span class="ht"><span class="hf" style="width:74%"></span></span><span class="hv">~9개월</span></div></div><div class="fcap">신규 진단마다 하드코딩 · 매번 6–12개월</div></div></div>
+
+          <h2 class="sec" id="d1-hypo">해결 전략</h2>
+          <div class="item"><div class="h"><span class="n">01</span><b>진단 경험을 구성하는 Core 모듈화</b></div><p>진단지–분석–보고서로 이어지는 핵심 구조를 하나의 Core로 통합하고, 콘텐츠만 변경하면 새로운 진단을 확장할 수 있는 구조를 만듭니다.</p></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>HR 라이프사이클 기반의 데이터 연결</b></div><p>입사 전 레퍼런스 체크부터 근무, 수습 종료 전 다면진단, 퇴사까지 이어지는 진단 구조를 만들고, 서로 다른 시점의 데이터를 연결해 사전 평가와 실제 업무 평가를 비교할 수 있는 구조를 만듭니다.</p></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>PLG 기반 제품 확장</b></div><p>레퍼런스 체크 고객이 수습 종료 시점에 자연스럽게 다면진단까지 경험하도록 연결해, 영업 개입 없이 제품군이 확장되는 퍼널을 만듭니다.</p></div>
+
+          <h2 class="sec" id="d1-design">실험 및 디자인</h2>
+          <div class="item">
+            <div class="h"><span class="n">01</span><b>진단–분석–보고서의 공통 Core 시스템 구축</b></div>
+            <p>관리자가 별도의 개발 없이 진단 목적에 맞는 질문지를 직접 구성하고 프리셋으로 저장할 수 있도록 에디터 구조를 설계했습니다.</p>
+            <p>진단지, 분석, 보고서가 동일한 Core를 사용하도록 구조화해 새로운 진단을 접하더라도 기존과 동일한 UX를 경험하도록 했습니다.</p>
+            <p>이를 통해 진단마다 새롭게 학습해야 하는 부담을 줄이고, 하나의 UX 패턴 안에서 여러 진단을 사용할 수 있도록 설계했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">진단지 에디터</span></div><div class="stage">
+              <div class="win"><div class="wtop"><span class="seg"><span class="on">질문</span><span>응답</span><span>통계</span><span>설정</span></span><span style="margin-left:auto" class="pill ghost">저장</span><span class="pill">발행</span></div><div class="wbody" style="background:var(--subtle)">
+                <div class="uicard"><div class="uirow"><span class="field big">레퍼런스 체크 · 표준</span></div><div class="uirow" style="margin-top:9px"><span class="field mut">성과·협업·신뢰도를 함께 일한 동료에게 확인</span></div></div>
+                <div class="uicard" style="margin-top:10px"><div class="uirow"><span class="field">함께 일한 기간</span><span class="sel">객관식(단일) <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></svg></span></div>
+                  <div style="margin-top:8px"><div class="opt"><span class="rad"></span>1년 미만<span class="x">✕</span></div><div class="opt"><span class="rad"></span>1~3년<span class="x">✕</span></div><div class="opt"><span class="rad" style="border-style:dashed"></span><span class="add">＋ 옵션 추가</span></div></div>
+                </div>
+              </div></div>
+            </div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">02</span><b>HR 라이프사이클 기반의 횡적·종적 확장</b></div>
+            <p>기존에는 새로운 진단을 하나씩 개발해야 했지만, 공통 Core 위에서 관리자가 새로운 진단을 구성할 수 있도록 해 콘텐츠를 바꾸는 방식으로 진단을 확장했습니다.</p>
+            <p>동시에 입사 전 레퍼런스 체크 → 근무 → 수습 종료 전 다면진단 → 퇴사로 이어지는 진단 흐름을 연결하고, 입사 전 레퍼런스 체크와 수습 종료 전 다면진단을 교차 비교할 수 있는 데이터 피드백 루프를 구축했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">진단 유형 · 라이프사이클</span></div><div class="stage">
+              <div class="win"><div class="wtop"><span class="wt">진단 유형</span><span style="margin-left:auto" class="pill">＋ 새 진단</span></div><div class="wbody">
+                <div class="lrow"><span class="cdot" style="background:var(--verify)"></span><span class="nm">레퍼런스 체크 · 표준</span><span class="meta">문항 8 · 사용 42</span><span class="bdg ok">발행됨</span></div>
+                <div class="lrow"><span class="cdot" style="background:var(--hire)"></span><span class="nm">다면 진단 · 360°</span><span class="meta">문항 8 · 사용 24</span><span class="bdg ok">발행됨</span></div>
+                <div class="lrow" style="border-style:dashed"><span class="cdot" style="background:var(--culture)"></span><span class="nm" style="color:var(--muted);font-weight:500">＋ 진단 유형 추가 (즉시 확장)</span></div>
+                <div class="life" style="margin-top:20px"><div class="stg"><div class="d2"></div><div class="t2">입사 전<br>레퍼런스</div></div><div class="stg"><div class="d2"></div><div class="t2">입사</div></div><div class="stg"><div class="d2"></div><div class="t2">근무</div></div><div class="stg hot"><div class="d2"></div><div class="t2">수습 전<br>다면진단</div></div><div class="stg"><div class="d2"></div><div class="t2">퇴사</div></div></div>
+              </div></div>
+              <div class="cap">유형 추가만으로 즉시 확장(횡적) + 라이프사이클 연속 진단(종적) + 사전·사후 교차 비교</div>
+            </div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">03</span><b>PLG 기반 제품 확장 퍼널 설계</b></div>
+            <p>레퍼런스 체크만 이용하는 고객에게 수습 종료 시점에 자동 알림을 보내고, 다면진단을 무료로 경험할 수 있도록 설계했습니다.</p>
+            <p>두 진단의 결과를 비교한 리포트까지 제공해 기존 고객이 별도의 영업 접점 없이 다음 제품으로 확장할 수 있는 경험을 만들었습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">자동 알림 · 비교 리포트</span></div><div class="stage">
+              <div class="win" style="margin-bottom:12px"><div class="wbody" style="display:flex;align-items:center;gap:12px"><span style="width:36px;height:36px;border-radius:9px;background:var(--subtle);display:grid;place-items:center;color:var(--hire);flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6"/><path d="M10 20a2 2 0 0 0 4 0"/></svg></span><span style="flex:1;line-height:1.5"><b style="font-size:13px">[A사] 수습 종료 D-7</b><br><span style="color:var(--muted);font-size:12.5px">다면진단 무료 체험이 준비됐어요. 레퍼런스 체크와 비교해보세요.</span></span><span class="pill">체험 시작</span></div></div>
+              <div class="win"><div class="wtop"><span class="wt">사전·사후 정합성 리포트</span><span class="bdg ok" style="margin-left:auto">AI 분석</span></div><div class="wbody">
+                <div class="leg"><span><i style="background:var(--border2)"></i>입사 전 · 레퍼런스</span><span><i style="background:var(--fg)"></i>수습 후 · 다면진단</span></div>
+                <div class="cmp">
+                  <div class="row"><span class="cl">문제 해결</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:82%"></span></span><span class="cbar"><span class="cf post" style="width:88%"></span></span></span></div>
+                  <div class="row"><span class="cl">실행력</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:78%"></span></span><span class="cbar"><span class="cf post" style="width:84%"></span></span></span></div>
+                  <div class="row"><span class="cl">전문성</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:74%"></span></span><span class="cbar"><span class="cf post" style="width:72%"></span></span></span></div>
+                  <div class="row"><span class="cl">협업</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:66%"></span></span><span class="cbar"><span class="cf post" style="width:76%"></span></span></span></div>
+                  <div class="row"><span class="cl">커뮤니케이션</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:64%"></span></span><span class="cbar"><span class="cf post" style="width:62%"></span></span></span></div>
+                  <div class="row"><span class="cl">성실성</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:80%"></span></span><span class="cbar"><span class="cf post" style="width:83%"></span></span></span></div>
+                  <div class="row"><span class="cl">리더십</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:46%"></span></span><span class="cbar"><span class="cf post" style="width:52%"></span></span></span></div>
+                  <div class="row"><span class="cl">대인 관계</span><span class="cbars"><span class="cbar"><span class="cf pre" style="width:40%"></span></span><span class="cbar"><span class="cf post" style="width:44%"></span></span></span></div>
+                </div>
+                <div class="aip"><span class="score">87<span style="font-size:15px;font-weight:700">%</span></span><span class="atx"><b>사전·사후 정합성 87%</b><br>강·약점 사례 텍스트를 AI가 분석해 입사 전 레퍼런스 평가와의 일치도를 산출했습니다. 8개 역량 순위 상관도 0.81, 강점 1·2위(문제 해결·실행력) 일치.</span></div>
+              </div></div>
+            </div></div>
+          </div>
+
+          <h2 class="sec" id="d1-result">결과 및 성과</h2>
+          <p class="lead">공통 Core를 기반으로 신규 진단 출시 리드타임을 단축하고, 제품 간 데이터를 연결해 제품 확장과 진단 신뢰성 검증이 함께 가능한 구조를 구축했습니다.</p>
+          <div class="kpis">
+            <div class="stat"><div class="l">레퍼런스 체크 매출</div><div class="v">400% ↑</div><div class="s">DX 전환·플랫폼 확장 이후</div></div>
+            <div class="stat"><div class="l">신규 진단 리드타임</div><div class="v">6–12개월<span class="a">→</span>2–3개월</div><div class="s">공통 Core 기반 확장</div></div>
+            <div class="stat"><div class="l">사전·사후 데이터</div><div class="v">연결 구조 확보</div><div class="s">교차 비교 기반 신뢰성 검증</div></div>
+          </div>
+          <div class="item"><div class="h"><span class="n">01</span><b>레퍼런스 체크 매출 400% 성장</b></div><p>레퍼런스 체크를 웹 서비스로 전환하고 진단 제품군을 하나의 플랫폼으로 확장하면서, DX 전환 이후 매출이 400% 성장했습니다.</p></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>신규 진단 출시 리드타임 단축</b></div><p>질문지와 보고서가 하드코딩되어 6개월~1년이 걸리던 신규 진단 개발을 공통 Core 위에서 콘텐츠를 변경하는 구조로 재설계해 2~3개월로 단축했습니다.</p></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>데이터 신뢰성 검증 기반 확보</b></div><p>입사 전 레퍼런스 체크와 수습 종료 전 다면진단을 교차 비교할 수 있는 데이터 구조를 마련해, 진단 문항과 결과 해석의 신뢰도를 지속적으로 검증·고도화할 수 있는 기반을 확보했습니다.</p></div>
+        </article>
+
+        <!-- ============ DOC 2 ============ -->
+        <article class="doc" data-doc="2">
+          <div class="doc-top">
+            <div><div class="eyebrow">PROJECT <b>02</b></div><h1>평가의 변별력을 높이다</h1><p class="desc">점수 중심 평가를 순위 기반 평가로 전환해, 후보자의 강점과 약점을 더 선명하게 만들었습니다.</p></div>
+          </div>
+          <div class="kws"><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>기획~런칭 전 과정 주도</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>데이터 기반 UX 설계·개선</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>사용자 중심 문제 정의</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>정량적 근거 기반</span></div>
+
+          <h2 class="sec" id="d2-pain">문제 정의</h2>
+          <p class="lead">기존 역량 평가는 높은 점수에 응답이 몰리면서 후보자 간 차이를 구분하기 어려웠고, 추천 여부와 역량 평가의 목적도 하나의 흐름에 섞여 있었습니다.</p>
+          <div class="item"><div class="h"><span class="n">01</span><b>높은 점수에 몰리는 응답</b></div><p>기존 5점 리커트 척도 기반 역량 평가에서는 응답자의 <strong>99.1%가 4~5점</strong>에 응답해 후보자의 강점과 약점을 구분하기 어려웠습니다.</p><p>반면 추천 여부에서는 약 10% 내외의 비추천 의견이 확인되어, 역량 평가와 추천 판단 사이에 데이터 변별력의 차이가 나타났습니다.</p><div class="fig"><div class="fbody"><div class="dists"><div class="dist"><div class="dt">추천 의사 · 솔직</div><div class="dbars"><span style="height:34%"></span><span style="height:60%"></span><span style="height:44%"></span><span style="height:100%"></span></div><div class="dxlab"><span>추천</span><span></span><span></span><span>비추천</span></div></div><div class="dist"><div class="dt">역량·서술 · 칭찬 몰림</div><div class="dbars"><span style="height:8%"></span><span style="height:12%"></span><span style="height:22%"></span><span style="height:88%;background:var(--exit)"></span><span style="height:100%;background:var(--exit)"></span></div><div class="dxlab"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div></div></div></div><div class="fcap">추천은 솔직, 역량 평가는 4–5점 칭찬 몰림</div></div></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>평가 목적이 하나의 흐름에 섞여 있었습니다</b></div><p>‘추천 여부’는 채용 의사결정을 위한 핵심 판단인 반면, ‘역량·서술 평가’는 그 판단을 보완하는 참고 자료입니다.</p><p>하지만 두 평가가 하나의 흐름에 혼재되어 있어, 평가자가 역량 평가에서도 긍정적인 응답을 이어가기 쉬웠고 실제 채용 의사결정에 활용할 수 있는 정보의 밀도도 낮았습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node dash">추천 · 역량 · 서술 (혼재)</span><span class="ar">→</span><span class="node">추천</span><span class="node">역량 · 서술</span></div></div><div class="fcap">핵심 결정과 참고 자료 혼재 → 분리 필요</div></div></div>
+
+          <h2 class="sec" id="d2-hypo">해결 전략</h2>
+          <div class="item"><div class="h"><span class="n">01</span><b>추천 여부와 역량 평가 분리</b></div><p>추천 여부를 평가의 최상단에서 먼저 판단하도록 하고, 이후 역량·서술 평가는 독립적인 참고 자료로 분리합니다.</p></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>절대점수에서 상대적인 순위로 전환</b></div><p>5점 리커트 척도 대신 8개 역량의 상대적인 강점과 약점을 비교하는 Rank-order 방식을 도입합니다.</p></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>순위와 실제 업무 사례 연결</b></div><p>상대적인 순위만 제공하는 데 그치지 않고, 평가자가 해당 순위를 부여한 구체적인 업무 사례까지 함께 수집해 결과의 맥락을 확보합니다.</p></div>
+
+          <h2 class="sec" id="d2-design">실험 및 디자인</h2>
+          <div class="item">
+            <div class="h"><span class="n">01</span><b>평가 흐름의 분리 — Decoupling</b></div>
+            <p>평가 시작 단계에서 추천 여부를 먼저 확정하도록 설계해 핵심 의사결정을 명확하게 분리했습니다.</p>
+            <p>이후 역량·서술 평가는 추천 여부와 분리된 참고 자료로 정의해, 추천 여부에 대한 심리적 부담 없이 후보자의 역량을 평가할 수 있도록 평가 흐름을 재구성했습니다.</p>
+            <p>추천 척도에는 BARS(행동 기반 평가 척도)를 적용해 ‘무조건 채용’, ‘비슷한 유형의 후보자와 비교한 뒤 채용’처럼 구체적인 행동 기준을 제시했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">평가자 화면 · 추천 확정</span></div><div class="stage">
+              <div class="win"><div class="wbody"><div class="recq">이 후보를 추천하시겠습니까? <span class="qhint">BARS · 행동 기반 5점 척도</span></div><div class="barsopt">
+                <label class="bo"><span class="rad"></span>무조건 채용하겠습니다</label>
+                <label class="bo on"><span class="rad"></span>비슷한 유형의 후보자와 비교한 뒤 채용하겠습니다</label>
+                <label class="bo"><span class="rad"></span>다른 대안이 없다면 채용하겠습니다</label>
+                <label class="bo"><span class="rad"></span>채용을 권하지 않습니다</label>
+                <label class="bo"><span class="rad"></span>어떤 경우에도 채용하지 않겠습니다</label>
+              </div></div></div>
+              <div class="cap">BARS 행동 기준으로 추천 여부를 먼저 확정, 역량·서술 평가는 참고 자료로 분리</div>
+            </div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">02</span><b>평가 방법론 검토 — Rank-order</b></div>
+            <p>리커트 척도를 대체할 방법을 검토하면서 BARS를 역량 평가에도 적용하는 방안을 함께 검토했습니다.</p>
+            <p>한동대학교 심리학부와 역량검사 문항을 개발하며 평가 방법론에 대한 자문을 받고, 역량을 단순한 우열로 평가하기보다 개인마다 강점과 약점이 서로 다른 스펙트럼으로 존재한다는 관점을 채택했습니다.</p>
+            <p>이에 따라 8개 역량을 절대적인 점수로 평가하기보다 상대적인 위치를 비교하는 Rank-order 방식을 도입했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">역량 스펙트럼 · 상대 평가 관점</span></div><div class="stage">
+              <div class="win"><div class="wtop"><span class="wt">역량은 절대 점수가 아니라 상대적 스펙트럼</span><span class="meta" style="margin-left:auto;color:var(--faint);font-size:11px">한동대 심리학부 자문</span></div><div class="wbody">
+                <div class="spec">
+                  <div class="spechead"><span>◀ 강점</span><span>개선점 ▶</span></div>
+                  <div class="specrow"><span class="sl">문제 해결</span><span class="spectrack"><span class="specdot" style="left:12%"></span></span></div>
+                  <div class="specrow"><span class="sl">실행력</span><span class="spectrack"><span class="specdot" style="left:22%"></span></span></div>
+                  <div class="specrow"><span class="sl">성실성</span><span class="spectrack"><span class="specdot" style="left:33%"></span></span></div>
+                  <div class="specrow"><span class="sl">전문성</span><span class="spectrack"><span class="specdot" style="left:45%"></span></span></div>
+                  <div class="specrow"><span class="sl">협업</span><span class="spectrack"><span class="specdot" style="left:57%"></span></span></div>
+                  <div class="specrow"><span class="sl">커뮤니케이션</span><span class="spectrack"><span class="specdot" style="left:70%"></span></span></div>
+                  <div class="specrow"><span class="sl">리더십</span><span class="spectrack"><span class="specdot" style="left:82%"></span></span></div>
+                  <div class="specrow"><span class="sl">대인 관계</span><span class="spectrack"><span class="specdot" style="left:91%"></span></span></div>
+                </div>
+              </div></div>
+              <div class="cap">역량을 좋고 나쁨이 아니라 개인마다 다른 상대적 스펙트럼으로 보고, 8개 역량의 상대 위치를 비교</div>
+            </div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">03</span><b>인터랙션 검증 — Dropdown → Drag &amp; Drop</b></div>
+            <p>초기에는 각 역량마다 순위를 선택하는 Dropdown 방식으로 설계했습니다.</p>
+            <p>내부 직원 테스트에서 역량의 순서를 정하는 과정에서 마지막 몇 개의 카드를 두고 반복적으로 고민하며 순서를 바꾸는 행동이 관찰됐습니다.</p>
+            <p>기존 방식에서는 순위를 변경할 때 각 항목을 다시 선택해야 했기 때문에, 전체 순서를 한눈에 확인하고 즉시 재조정할 수 있도록 Drag &amp; Drop 방식으로 변경했습니다.</p>
+            <p>사용자가 고민하는 과정에서 카드를 직접 움직이며 전체 순서를 확인하고, 필요한 순간 바로 순위를 변경할 수 있도록 인터랙션을 설계했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">평가자 화면 · 역량 순위</span></div><div class="stage">
+              <div class="win"><div class="wtop"><span class="wt">역량 순위</span><span class="meta" style="margin-left:auto;color:var(--faint);font-size:11px">우수한 역량부터 드래그</span></div><div class="wbody"><div class="ranklist">
+                <div class="rankcard top"><span class="grip">⋮⋮</span><span class="rk">1</span><span class="nm">문제 해결</span><span class="bdg">강점</span></div>
+                <div class="rankcard top"><span class="grip">⋮⋮</span><span class="rk">2</span><span class="nm">실행력</span><span class="bdg">강점</span></div>
+                <div class="rankcard"><span class="grip">⋮⋮</span><span class="rk">3</span><span class="nm">전문성</span></div>
+                <div class="rankcard"><span class="grip">⋮⋮</span><span class="rk">4</span><span class="nm">협업</span></div>
+                <div class="rankgap">⋯</div><div class="rankcard bot"><span class="grip">⋮⋮</span><span class="rk">7</span><span class="nm">리더십</span><span class="bdg">개선점</span></div>
+                <div class="rankcard bot"><span class="grip">⋮⋮</span><span class="rk">8</span><span class="nm">대인 관계</span><span class="bdg">개선점</span></div>
+              </div></div></div>
+            </div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">04</span><b>순위와 실제 사례 연결 — Contextual Linking</b></div>
+            <p>상위 2개 역량은 강점, 하위 2개 역량은 개선점으로 정의하고 해당 역량에 순위를 부여한 구체적인 업무 사례를 작성하도록 설계했습니다.</p>
+            <p>순위만으로 끝나지 않도록 왜 해당 역량을 상·하위로 평가했는지에 대한 실제 업무 맥락까지 함께 수집했습니다.</p>
+            <p>이를 통해 상대적인 순위 데이터와 정성적인 사례를 연결해 실제 채용 의사결정에 활용할 수 있는 정보를 제공했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">평가자 화면 · 사례 기술</span></div><div class="stage">
+              <div class="win"><div class="wbody"><div class="caseblk"><div class="ch"><span class="bdg" style="color:var(--verify);background:color-mix(in srgb,var(--verify) 12%,transparent)">강점 · 1위</span> 문제 해결</div><div class="ta">이 역량을 1위로 꼽은 구체적 사례를 적어주세요…</div></div><div class="caseblk"><div class="ch"><span class="bdg" style="color:var(--exit);background:color-mix(in srgb,var(--exit) 14%,transparent)">개선점 · 8위</span> 대인 관계</div><div class="ta">이 역량을 마지막 순위로 둔 구체적 사례를 적어주세요…</div></div></div></div>
+            </div></div>
+          </div>
+
+          <h2 class="sec" id="d2-result">결과 및 성과</h2>
+          <p class="lead">점수 몰림으로 변별력이 없던 평가를 강제 순위법과 사례 연계 방식으로 재설계해, 후보자의 상대적인 강점·약점과 이를 뒷받침하는 정성적 근거를 함께 확인할 수 있는 평가 데이터로 전환했습니다.</p>
+          <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">8역량 결과 · 기존 그래프 vs 실질 데이터</span></div><div class="stage"><div class="vs">
+            <div class="vspanel"><div class="vt">기존 · 방사형 그래프</div>
+              <svg class="radar" viewBox="0 0 200 200" aria-hidden="true">
+                <polygon class="ring" points="100,22 155.1,44.9 178,100 155.1,155.1 100,178 44.9,155.1 22,100 44.9,44.9"/>
+                <polygon class="ring" points="100,61 127.6,72.4 139,100 127.6,127.6 100,139 72.4,127.6 61,100 72.4,72.4"/>
+                <line class="axis" x1="100" y1="100" x2="100" y2="22"/><line class="axis" x1="100" y1="100" x2="155.1" y2="44.9"/><line class="axis" x1="100" y1="100" x2="178" y2="100"/><line class="axis" x1="100" y1="100" x2="155.1" y2="155.1"/><line class="axis" x1="100" y1="100" x2="100" y2="178"/><line class="axis" x1="100" y1="100" x2="44.9" y2="155.1"/><line class="axis" x1="100" y1="100" x2="22" y2="100"/><line class="axis" x1="100" y1="100" x2="44.9" y2="44.9"/>
+                <polygon class="blob" points="100,25 150.7,49.3 176,100 149.6,149.6 100,173 47,153 30,100 48.2,48.2"/>
+              </svg>
+              <div class="vsnote">99.1%가 4–5점 → 변별력 없음</div>
+            </div>
+            <div class="vspanel"><div class="vt" style="text-align:left">개선 · 강제 순위 + 실제 사례 연계</div>
+              <div class="res">
+                <div class="rgrouplabel" style="color:var(--verify)">강점</div>
+                <div class="ritem s"><div class="rtop"><span class="rrk">1</span><span class="rnm">문제 해결</span><span class="rtag">강제 1순위</span></div><div class="rcase"><span class="ai">사례</span>“결제 장애 시 원인을 빠르게 좁혀 12시간 내 복구를 주도했다.”</div></div>
+                <div class="ritem s"><div class="rtop"><span class="rrk">2</span><span class="rnm">실행력</span><span class="rtag">강제 2순위</span></div><div class="rcase"><span class="ai">사례</span>“분기 목표를 2주 앞당겨 완료해 팀 리듬을 끌어올렸다.”</div></div>
+                <div class="rgrouplabel" style="color:var(--exit)">개선점</div>
+                <div class="ritem w"><div class="rtop"><span class="rrk">7</span><span class="rnm">리더십</span><span class="rtag">강제 7순위</span></div><div class="rcase"><span class="ai">사례</span>“방향을 먼저 제시하기보다 합의를 기다리는 편이었다.”</div></div>
+                <div class="ritem w"><div class="rtop"><span class="rrk">8</span><span class="rnm">대인 관계</span><span class="rtag">강제 8순위</span></div><div class="rcase"><span class="ai">사례</span>“의견 충돌 시 대화를 미뤄 조율에 시간이 걸렸다.”</div></div>
+              </div>
+            </div>
+          </div><div class="cap">무의미한 그래프 해석이 아니라, 강점·개선점을 강제로 드러내고 실제 사례까지 연계된 실질 데이터를 제공</div></div></div>
+          <div class="kpis">
+            <div class="stat"><div class="l">대기업 고객사 만족도</div><div class="v">60점대<span class="a">→</span>85점대</div><div class="s">헤비유저 3곳 직접 방문·인터뷰</div></div>
+            <div class="stat"><div class="l">평가 데이터 변별력</div><div class="v">확보</div><div class="s">8개 역량 상대 순위 전환</div></div>
+            <div class="stat"><div class="l">사례 기반 정성 데이터</div><div class="v">확보</div><div class="s">강점·개선점 사례 연결</div></div>
+          </div>
+          <div class="item"><div class="h"><span class="n">01</span><b>대기업 고객사 만족도 상승</b></div><p>평가 방식에 컴플레인이 많던 헤비유저 대기업 고객사 중 3곳을 무작위로 선별해 개선안을 적용하고, 고객사를 직접 방문해 인터뷰했습니다.</p><p>그 결과 만족도 점수가 60점대에서 85점대로 상승했습니다.</p></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>평가 데이터의 변별력 확보</b></div><p>응답자의 99.1%가 4~5점에 몰렸던 기존 리커트 평가를 8개 역량의 강제 순위법으로 전환해, 역량 간 상대적인 차이가 데이터로 드러나도록 개선했습니다.</p></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>사례와 연결된 실질 데이터 확보</b></div><p>상·하위 역량에 구체적인 업무 사례를 연결해, 단순 점수나 그래프로는 파악하기 어려운 후보자의 강점·약점과 실제 업무 맥락을 함께 확인할 수 있도록 했습니다.</p></div>
+        </article>
+
+        <!-- ============ DOC 3 ============ -->
+        <article class="doc" data-doc="3">
+          <div class="doc-top">
+            <div><div class="eyebrow">PROJECT <b>03</b></div><h1>디자인–개발 AX</h1><p class="desc">AI 기반 워크플로우를 구축해 디자인과 개발 사이의 반복 작업을 줄이고, 제품 검증 속도를 높였습니다.</p></div>
+          </div>
+          <div class="kws"><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>기획~런칭 전 과정 주도</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>디자인 시스템 구축·운영</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Figma·AI 협업 도구 활용</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>직군 간 협업 리드</span></div>
+
+          <h2 class="sec" id="d3-pain">문제 정의</h2>
+          <p class="lead">빠르게 제품을 고도화하는 과정에서 디자인 시스템과 코드 사이의 반복적인 싱크 작업, 그리고 신규 기능을 검증하기 위한 0→1 프로토타이핑의 반복이 제품 개발 속도를 떨어뜨리고 있었습니다.</p>
+          <div class="item"><div class="h"><span class="n">01</span><b>디자인 시스템과 코드 사이의 반복적인 싱크 작업</b></div><p>서비스가 지속적으로 고도화되면서 디자인 시스템 업데이트와 UI 컴포넌트의 변경 사항을 수동으로 관리하는 작업이 반복됐습니다.</p><p>변경 사항을 개발에 전달하고 다시 확인하는 과정에서 디자인–개발 간 커뮤니케이션 비용과 개발 지연이 발생했습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node"><i style="background:var(--hire)"></i>Figma</span><span class="ar" style="color:var(--exit);font-weight:700">✕ 수동</span><span class="node"><i style="background:var(--fg)"></i>Code</span></div></div><div class="fcap">수동 싱크 · 변경 반영 지연</div></div></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>0→1 프로토타이핑의 반복</b></div><p>신규 기능을 개발할 때 기존 컴포넌트의 조합만으로 구현할 수 있는 경우에도 매번 기획과 시안을 새롭게 구성해야 했습니다.</p><p>그 결과 아이디어를 실제 제품 형태로 검증하기까지 시간이 오래 걸렸고, 디자인–개발 사이의 불필요한 커뮤니케이션도 반복됐습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node">기획</span><span class="ar">→</span><span class="node">시안</span><span class="ar">↺</span><span class="node dash" style="opacity:.55">다시 기획</span></div></div><div class="fcap">조합 가능한데도 매번 새로 · 반복 커뮤니케이션</div></div></div>
+
+          <h2 class="sec" id="d3-hypo">해결 전략</h2>
+          <div class="item"><div class="h"><span class="n">01</span><b>디자인 정보를 코드 생성 과정에 연결</b></div><p>Figma의 디자인 정보와 컴포넌트 구조를 AI가 활용할 수 있도록 연결해 디자인과 코드 사이의 반복적인 전달 작업을 줄입니다.</p></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>AI 기반 프로토타이핑</b></div><p>디자이너가 직접 아이디어를 구현하고 검증할 수 있는 환경을 구축해 기획–디자인–개발 사이의 간극을 줄입니다.</p></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>디자인 시스템과 Spec 구조화</b></div><p>컴포넌트와 디자인 토큰, 상태값을 구조화해 AI와 개발자가 동일한 정보를 활용할 수 있도록 하고, 반복적인 문서 작성과 핸드오프 비용을 줄입니다.</p></div>
+
+          <h2 class="sec" id="d3-design">실험 및 디자인</h2>
+          <div class="item">
+            <div class="h"><span class="n">01</span><b>Figma MCP · 디자인–코드 연결 워크플로우</b></div>
+            <p>Figma 환경과 LLM(Claude/Cursor)을 MCP(Model Context Protocol)로 연결해 디자인 시스템의 구조와 컴포넌트 정보를 AI가 활용할 수 있는 워크플로우를 구축했습니다.</p>
+            <p>디자인 정보를 코드 생성·수정 과정에 연결해 디자인과 구현 사이의 불일치를 줄이고, 변경 사항을 빠르게 반영할 수 있는 기반을 마련했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">Figma MCP → Code</span></div><div class="stage">
+              <div class="pipe"><span class="node"><i style="background:var(--hire)"></i>Figma</span><span class="ar">→</span><span class="node dash">MCP</span><span class="ar">→</span><span class="node"><i style="background:var(--verify)"></i>Cursor · Claude</span><span class="ar">→</span><span class="node"><i style="background:var(--fg)"></i>Code</span></div>
+              <div class="grid2" style="margin-top:16px">
+                <div class="win"><div class="wtop"><span class="wt" style="font-size:12px">Design Token</span></div><div class="wbody"><table class="ttab"><tr><td>radius/md</td><td>8 → <span style="color:var(--verify)">10</span></td></tr><tr><td>color/border</td><td>#E7E7EA</td></tr><tr><td>space/3</td><td>12px</td></tr></table></div></div>
+                <div class="win"><div class="wtop"><span class="wt" style="font-size:12px">Code · 자동 반영</span><span class="bdg ok" style="margin-left:auto">synced</span></div><div class="wbody" style="padding:0"><div class="codepane" style="border:0;border-radius:0"><div><span class="fn2">.card</span> {</div><div class="diff-d">&nbsp;- radius: <span class="num2">8px</span>;</div><div class="diff-a">&nbsp;+ radius: <span class="num2">10px</span>;</div><div>}</div></div></div></div>
+              </div>
+            </div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">02</span><b>AI 기반 프로토타이핑을 통한 가설 검증 가속화</b></div>
+            <p>검증된 기술 스택인 Next.js / Supabase / Vercel 환경에서 Cursor를 활용해 디자이너가 아이디어를 직접 프론트엔드 프로토타입으로 구현하고 제품 스펙을 구체화했습니다.</p>
+            <p>기획 → 디자인 → 구현의 간극을 줄이고, 실제 사용 환경에서 검증할 수 있는 단계까지 빠르게 도달하는 제품 검증 루프를 구축했습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">Cursor · 프로토타이핑</span></div><div class="stage"><div class="grid2">
+              <div class="win"><div class="wtop"><span class="wt" style="font-size:12px">Prompt</span><span class="sel" style="margin-left:auto;height:24px">Next.js</span></div><div class="wbody" style="padding:0"><div class="codepane" style="border:0;border-radius:0"><div><span class="com2">› 진단 카드에 ‘발행됨’ 배지</span></div><div><span class="com2">&nbsp;&nbsp;+ hover 상태 (DS 토큰)</span></div><div style="margin-top:5px"><span class="kw2">function</span> <span class="fn2">DiagCard</span>() {</div><div>&nbsp;&nbsp;<span class="kw2">return</span> &lt;<span class="fn2">Card</span>/&gt;;</div><div>}</div></div></div></div>
+              <div class="win"><div class="wtop"><span class="wt" style="font-size:12px">Live Preview</span></div><div class="wbody"><div class="prev"><div class="lrow" style="width:100%"><span class="cdot" style="background:var(--verify)"></span><span class="nm">레퍼런스 체크 · 표준</span><span class="bdg ok">발행됨</span></div></div></div></div>
+            </div></div></div>
+          </div>
+          <div class="item">
+            <div class="h"><span class="n">03</span><b>디자인 시스템 문서화 · Spec 정의 간소화</b></div>
+            <p>UI 컴포넌트의 상태값과 디자인 토큰을 AI가 활용할 수 있도록 구조화하고, 이를 기반으로 개발자에게 전달되는 기능 명세서(Spec) 작성과 핸드오프 과정을 간소화했습니다.</p>
+            <p>반복적인 문서 작성과 커뮤니케이션에 드는 시간을 줄이고, 디자이너가 UX 의사결정과 제품 검증에 더 집중할 수 있는 환경을 만들었습니다.</p>
+            <div class="shot"><div class="bar"><span class="dts"><i></i><i></i><i></i></span><span class="tt">Auto-generated Spec</span></div><div class="stage">
+              <div class="win"><div class="wtop"><span class="wt" style="font-size:12px">Component States · Card</span></div><div class="wbody"><table class="ttab"><tr><td>Default</td><td>bg surface · border 1px</td></tr><tr><td>Hover</td><td>border → foreground/25</td></tr><tr><td>Active</td><td>bg foreground/5</td></tr><tr><td>Disabled</td><td>opacity 0.5 · no-pointer</td></tr></table></div></div>
+            </div></div>
+          </div>
+
+          <h2 class="sec" id="d3-result">결과 및 성과</h2>
+          <p class="lead">반복적인 디자인–개발 커뮤니케이션과 수작업을 줄이고, 디자이너가 아이디어를 직접 구현하고 검증할 수 있는 AI 기반 제품 개발 파이프라인을 구축했습니다.</p>
+          <div class="kpis">
+            <div class="stat"><div class="l">제품 출시 리드타임</div><div class="v">6개월<span class="a">→</span>2개월</div><div class="s">기획/개발 각 1개월 스프린트 병렬</div></div>
+            <div class="stat"><div class="l">디자인–개발 소통 공수</div><div class="v">90% ↓</div><div class="s">미팅 시간 기준</div></div>
+            <div class="stat"><div class="l">디자인 시스템</div><div class="v">상시 관리 체계</div><div class="s">수동 동기화 제거</div></div>
+          </div>
+          <div class="item"><div class="h"><span class="n">01</span><b>제품 출시 리드타임 6개월 → 2개월</b></div><p>기획과 개발을 각각 1개월 스프린트로 병렬화하고 AI 프로토타이핑을 통해 검증을 앞당겨, 6개월이 걸리던 제품 출시를 2개월로 단축했습니다.</p></div>
+          <div class="item"><div class="h"><span class="n">02</span><b>디자인–개발 소통 공수 90% 절감</b></div><p>Figma 기반의 디자인 정보를 AI와 코드 생성 과정에 연결하고, 컴포넌트 상태와 Spec 전달 방식을 구조화해 미팅 시간 기준 디자인–개발 소통 공수를 90% 줄였습니다.</p></div>
+          <div class="item"><div class="h"><span class="n">03</span><b>디자인 시스템 상시 관리 체계 구축</b></div><p>수동으로 반복되던 디자인 시스템 관리와 전달 과정을 구조화해, 변경 사항을 빠르게 반영하고 UI 일관성을 지속적으로 유지할 수 있는 관리 체계를 구축했습니다.</p></div>
+        </article>
+
+      </main>
+
+      <aside class="toc">
+        <div class="lbl">On This Page</div>
+        <nav id="tocNav"></nav>
+      </aside>
+    </div>
+  </div>
+  <div class="sbackdrop" id="sbackdrop"></div>
+</div>
+
+<div class="a11y" id="a11y">
+  <button class="fab" id="themeBtn" type="button" aria-label="밝기 전환">
+    <svg class="ic-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+    <svg class="ic-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  </button>
+  <button class="fab" id="a11yBtn" type="button" aria-label="가독성 설정" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 14h-5"/><path d="M16 16v-3.5a2.5 2.5 0 0 1 5 0V16"/><path d="M4.5 13h6"/><path d="m3 16 4.5-9 4.5 9"/></svg></button>
+  <div class="a11y-hint" id="a11yHint"><span class="hx">👀</span><span class="tx2">한눈에 읽기 어려우신가요?<br>여기서 조절해보세요.</span><button class="hclose" id="a11yHintClose" type="button" aria-label="안내 닫기">✕</button></div>
+  <div class="a11y-panel" id="a11yPanel">
+    <div class="a11y-row"><span class="rl">글자 크기</span><span class="a11y-ctl"><button type="button" data-a="fs" data-d="-1" aria-label="글자 작게">−</button><span class="val" id="v-fs">100%</span><button type="button" data-a="fs" data-d="1" aria-label="글자 크게">＋</button></span></div>
+    <div class="a11y-row"><span class="rl">자간</span><span class="a11y-ctl"><button type="button" data-a="ls" data-d="-1" aria-label="자간 좁게">−</button><span class="val" id="v-ls">0</span><button type="button" data-a="ls" data-d="1" aria-label="자간 넓게">＋</button></span></div>
+    <div class="a11y-row"><span class="rl">행간</span><span class="a11y-ctl"><button type="button" data-a="lh" data-d="-1" aria-label="행간 좁게">−</button><span class="val" id="v-lh">1.65</span><button type="button" data-a="lh" data-d="1" aria-label="행간 넓게">＋</button></span></div>
+    <div class="a11y-row"><span class="rl">고대비</span><button type="button" id="hcToggle" class="hcsw" role="switch" aria-checked="false" aria-label="고대비 전환"></button></div>
+    <button class="a11y-reset" id="a11yReset" type="button">기본값으로</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement, tbtn = document.getElementById("themeBtn");
+    function cur() { var t = root.getAttribute("data-theme"); if (t) return t; return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; }
+    try { var s = localStorage.getItem("pf-theme"); if (s) root.setAttribute("data-theme", s); } catch (e) {}
+    tbtn.addEventListener("click", function () { var n = cur() === "dark" ? "light" : "dark"; root.setAttribute("data-theme", n); try { localStorage.setItem("pf-theme", n); } catch (e) {} });
+
+    // 가독성(접근성)
+    var content = document.querySelector(".content");
+    var layout = document.querySelector(".layout");
+    var A = { fs: 1, ls: 0, lh: 1.65 };
+    try { var sa = JSON.parse(localStorage.getItem("pf-a11y") || "null"); if (sa) A = sa; } catch (e) {}
+    function clampA(v, a, b) { return Math.min(b, Math.max(a, v)); }
+    function applyA11y() {
+      if (layout) layout.style.setProperty("--fs", A.fs);
+      content.style.letterSpacing = (-0.02 + A.ls).toFixed(3) + "em";
+      content.style.lineHeight = A.lh;
+      var vf = document.getElementById("v-fs"), vl = document.getElementById("v-ls"), vh = document.getElementById("v-lh");
+      if (vf) vf.textContent = Math.round(A.fs * 100) + "%";
+      if (vl) { var s = Math.round(A.ls * 100); vl.textContent = (s > 0 ? "+" : "") + s; }
+      if (vh) vh.textContent = (Math.round(A.lh * 100) / 100).toFixed(2);
+      try { localStorage.setItem("pf-a11y", JSON.stringify(A)); } catch (e) {}
+    }
+    [].forEach.call(document.querySelectorAll("#a11yPanel [data-a]"), function (b) {
+      b.addEventListener("click", function () {
+        var k = b.getAttribute("data-a"), d = +b.getAttribute("data-d");
+        if (k === "fs") A.fs = clampA(Math.round((A.fs + d * 0.05) * 100) / 100, 0.85, 1.4);
+        if (k === "ls") A.ls = clampA(Math.round((A.ls + d * 0.01) * 100) / 100, -0.06, 0.08);
+        if (k === "lh") A.lh = clampA(Math.round((A.lh + d * 0.1) * 100) / 100, 1.4, 2.4);
+        applyA11y();
+      });
+    });
+    var arst = document.getElementById("a11yReset");
+    if (arst) arst.addEventListener("click", function () { A = { fs: 1, ls: 0, lh: 1.65 }; applyA11y(); });
+    var a11yBtn = document.getElementById("a11yBtn"), a11yPanel = document.getElementById("a11yPanel");
+    if (a11yBtn) {
+      a11yBtn.addEventListener("click", function (e) { e.stopPropagation(); var o = a11yPanel.classList.toggle("open"); a11yBtn.setAttribute("aria-expanded", o); });
+      document.addEventListener("click", function (e) { if (!a11yPanel.contains(e.target) && !a11yBtn.contains(e.target)) a11yPanel.classList.remove("open"); });
+    }
+    applyA11y();
+
+    // 접근성 안내 말풍선 (끌 때까지 유지)
+    var hint = document.getElementById("a11yHint"), hintClose = document.getElementById("a11yHintClose");
+    function dismissHint() { if (hint) hint.classList.add("hide"); try { localStorage.setItem("pf-a11y-hint", "off"); } catch (e) {} }
+    var hintOff = false; try { hintOff = localStorage.getItem("pf-a11y-hint") === "off"; } catch (e) {}
+    if (hint && hintOff) hint.classList.add("hide");
+    if (hintClose) hintClose.addEventListener("click", function (e) { e.stopPropagation(); dismissHint(); });
+    if (a11yBtn) a11yBtn.addEventListener("click", dismissHint);
+
+    // 고대비
+    var hc = false;
+    try { hc = localStorage.getItem("pf-hc") === "1"; } catch (e) {}
+    var hcT = document.getElementById("hcToggle");
+    function applyHc() { root.classList.toggle("hc", hc); if (hcT) hcT.setAttribute("aria-checked", hc ? "true" : "false"); try { localStorage.setItem("pf-hc", hc ? "1" : "0"); } catch (e) {} }
+    if (hcT) hcT.addEventListener("click", function () { hc = !hc; applyHc(); });
+    applyHc();
+
+    var side = document.getElementById("side");
+    var cb = document.getElementById("collapseBtn");
+    var mnav = document.getElementById("mnavBtn");
+    var sbackdrop = document.getElementById("sbackdrop");
+    var isMobile = function () { return window.matchMedia && window.matchMedia("(max-width: 767px)").matches; };
+    try { if (!isMobile() && localStorage.getItem("pf-collapsed") === "1") side.classList.add("collapsed"); } catch (e) {}
+    if (cb) cb.addEventListener("click", function () {
+      if (isMobile()) { side.classList.remove("open"); return; }
+      side.classList.toggle("collapsed");
+      try { localStorage.setItem("pf-collapsed", side.classList.contains("collapsed") ? "1" : "0"); } catch (e) {}
+    });
+    if (mnav) mnav.addEventListener("click", function () { side.classList.remove("collapsed"); side.classList.add("open"); });
+    if (sbackdrop) sbackdrop.addEventListener("click", function () { side.classList.remove("open"); });
+
+    var CRUMB = { 0: "포트폴리오 소개", 1: "확장형 진단 플랫폼", 2: "평가의 변별력을 높이다", 3: "디자인–개발 AX" };
+    var docs = [].slice.call(document.querySelectorAll(".doc"));
+    var links = [].slice.call(document.querySelectorAll(".side-nav a[data-goto]"));
+    var toc = document.getElementById("tocNav");
+    var tocLinks = [];
+    var crumb = document.getElementById("crumb");
+    var active = 0, onScroll = null;
+    function buildToc() {
+      var d = document.querySelector('.doc[data-doc="' + active + '"]');
+      var secs = [].slice.call(d.querySelectorAll("h2.sec"));
+      toc.innerHTML = "";
+      secs.forEach(function (s, i) {
+        var a = document.createElement("a");
+        a.href = "#" + s.id; a.textContent = s.textContent.trim(); a.setAttribute("data-id", s.id);
+        if (i === 0) a.classList.add("on");
+        a.addEventListener("click", function (e) { e.preventDefault(); var el = document.getElementById(s.id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); });
+        toc.appendChild(a);
+      });
+      tocLinks = [].slice.call(toc.querySelectorAll("a"));
+    }
+    function spy() {
+      if (onScroll) window.removeEventListener("scroll", onScroll);
+      var d = document.querySelector('.doc[data-doc="' + active + '"]');
+      var secs = [].slice.call(d.querySelectorAll("h2.sec"));
+      onScroll = function () {
+        var idx = 0;
+        if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) idx = secs.length - 1;
+        else { for (var i = 0; i < secs.length; i++) { if (secs[i].getBoundingClientRect().top <= 92) idx = i; } }
+        var id = secs[idx] ? secs[idx].id : "";
+        tocLinks.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-id") === id); });
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+    function show(n) {
+      active = n;
+      docs.forEach(function (d) { d.classList.toggle("on", d.getAttribute("data-doc") == active); });
+      links.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-goto") == active); });
+      if (crumb) crumb.textContent = CRUMB[active] || "";
+      buildToc();
+      if (isMobile()) side.classList.remove("open");
+      window.scrollTo({ top: 0, behavior: "smooth" }); spy();
+    }
+    document.querySelectorAll("[data-goto]").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); show(+a.getAttribute("data-goto")); }); });
+    var pdfBtn = document.getElementById("pdfBtn");
+    if (pdfBtn) pdfBtn.addEventListener("click", function () { window.print(); });
+
+    show(0);
+  })();
+</script>
+</body>
+</html>
