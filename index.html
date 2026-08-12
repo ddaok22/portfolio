@@ -82,6 +82,8 @@
   :root[data-theme="light"] .ic-sun { display: none; } :root[data-theme="light"] .ic-moon { display: block; }
   .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; border: 0; cursor: pointer; transition: opacity .12s; }
   .btn:hover { opacity: .88; } .btn.ghost { background: none; border: 1px solid var(--border); color: var(--fg); }
+  #pdfBtn { background: none; border: 1px solid var(--border); color: var(--muted); transition: background .12s, color .12s, border-color .12s; }
+  #pdfBtn:hover { background: var(--hover); color: var(--fg); border-color: var(--border2); opacity: 1; }
   .mnav { display: none; width: 34px; height: 34px; border-radius: 8px; border: 0; background: none; color: var(--muted); place-items: center; cursor: pointer; margin-left: -6px; }
   .mnav:hover { color: var(--fg); }
   .sbackdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 55; }
@@ -373,8 +375,9 @@
   @media (max-width: 640px) { .plist { grid-template-columns: 1fr; } .cmpflow { flex-direction: column; } .cnode { max-width: none; width: 100%; } }
 
   /* ── PDF(인쇄) 전용 레이아웃 ── */
+  .printfoot { display: none; }
   @media print {
-    @page { size: A4; margin: 14mm 13mm; }
+    @page { size: A4; margin: 16mm 15mm 17mm; }
     :root, :root[data-theme="dark"], :root[data-theme="light"] {
       --bg: #ffffff; --fg: #18181b; --muted: #52525b; --faint: #8a8a92;
       --border: #e2e2e6; --border2: #cfd0d5; --subtle: #f5f5f6; --hover: #f0f0f1;
@@ -384,23 +387,29 @@
     }
     html, body { background: #fff !important; }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-shadow: none !important; }
-    .side, .topbar, .toc, .a11y, .menu { display: none !important; }
+    .side, .topbar, .toc, .a11y, .menu, .mnav, .sbackdrop, .btn, .jar, .jgo { display: none !important; }
     .app, .main { display: block !important; }
     .layout { display: block !important; max-width: none; margin: 0; padding: 0; gap: 0; }
-    .content { padding: 0 !important; --fs: 1 !important; letter-spacing: normal !important; line-height: 1.6 !important; }
+    .content { padding: 0 !important; --fs: 1 !important; letter-spacing: -0.01em !important; line-height: 1.6 !important; font-size: 10pt; color: #18181b; }
     .doc { display: block !important; break-before: page; }
     .doc:first-of-type { break-before: auto; }
-    .doc h1 { font-size: 26px; }
-    .doc .desc { font-size: 13.5px; }
-    .eyebrow { margin-bottom: 8px; }
-    h2.sec { break-after: avoid; break-inside: avoid; margin-top: 22px; padding-top: 16px; }
-    .item { margin-top: 15px; }
-    .item .h { break-after: avoid; }
+    .doc-top { display: block; padding-bottom: 11px; border-bottom: 1px solid var(--border); }
+    .eyebrow { margin-bottom: 6px; font-size: 8pt; letter-spacing: .12em; }
+    .doc h1 { font-size: 21pt; line-height: 1.12; }
+    .doc .desc { font-size: 11pt; margin-top: 8px; color: var(--muted); }
+    .kws { margin-top: 12px; } .kw { font-size: 8.5pt; }
+    h2.sec { break-after: avoid; break-inside: avoid; margin-top: 16px; padding-top: 13px; font-size: 13.5pt; }
+    .lead { font-size: 10pt; margin-top: 10px; }
+    .item { margin-top: 12px; }
+    .item .h { break-after: avoid; } .item .h b { font-size: 11pt; }
+    .item .n, .lead .pn { font-size: 9pt; }
+    .item p { font-size: 9.5pt; margin-top: 6px; }
     .item p, .lead { orphans: 3; widows: 3; }
-    .shot, .fig, .win, .aip, .vspanel, .vs, .kpis, .stat, .callout, .barcmp, .dists,
-    .rankcard, .lrow, .ritem, .caseblk, .uicard, .cmp .row, .hbar, .pipe, .life, .grid2,
-    .ranklist, .barsopt, .bo, .radar { break-inside: avoid; }
-    .btn { display: none !important; }
+    .eg { font-size: 8.5pt; }
+    .shot, .fig { margin-top: 10px; } .shot .stage { padding: 12px; }
+    .shot, .fig, .win, .aip, .vspanel, .vs, .kpis, .barcmp, .dists, .cmp, .ranklist, .barsopt, .life, .grid2, .pipe, .hbar, .spec, .plist, .arc, .strengths, .jlist, .callout { break-inside: avoid; }
+    .stat, .rankcard, .lrow, .ritem, .caseblk, .uicard, .bo, .scard, .pcard, .astep, .jcard, .cmp .row, .specrow, .radar { break-inside: avoid; }
+    .printfoot { display: block !important; position: fixed; bottom: 0; left: 0; right: 0; font-size: 7.5pt; color: var(--faint); text-align: center; padding: 4px 0; letter-spacing: .02em; }
   }
 </style>
 </head>
@@ -772,6 +781,8 @@
   </div>
   <div class="sbackdrop" id="sbackdrop"></div>
 </div>
+
+<div class="printfoot">포트폴리오 · AX 프로덕트 디자인</div>
 
 <div class="a11y" id="a11y">
   <button class="fab" id="themeBtn" type="button" aria-label="밝기 전환">
