@@ -85,7 +85,7 @@
       var strengths = why && why.others.filter(function (o) { return o.matches('.strengths'); })[0];
       // 슬라이드 1: 소개 + 프로덕트
       var s1 = slide('slide-split',
-        '<div class="s-left"><div class="s-eyebrow">' + (ov ? ov.title : '소개') + '</div>' +
+        '<div class="s-left"><div class="s-eyebrow">OVERVIEW</div>' +
         '<h3 class="s-h">' + h1 + '</h3><p class="s-lead">' + desc + '</p>' +
         '<div class="s-body">' + (ov ? leadsHTML(ov) : '') + '</div></div>' +
         '<div class="s-right"><div class="s-eyebrow">' + (pr ? pr.title : '프로덕트') + '</div><div class="s-wrap plist-wrap"></div></div>');
