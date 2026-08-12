@@ -1,7 +1,11 @@
 # 개인 소스 파일(공개 레포 제외)
 *.pdf
+!portfolio.pdf
 *.docx
 # 로컬 배포/임시
 dist/
 *.zip
 ref*.png
+# PDF 빌드 산출물(중간물만 제외, portfolio.pdf는 배포)
+pdf_preview/
+portfolio-print.html
