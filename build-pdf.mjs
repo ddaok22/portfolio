@@ -1,81 +1,96 @@
-// 포트폴리오 PDF 문서 빌드
-// index.html의 본문/목업을 그대로 추출 → 웹 UI 제거 + 표지 + A4 문서 레이아웃으로 재구성한
-// portfolio-print.html 생성. 이후 헤드리스 크롬으로 portfolio.pdf 렌더.
+// 포트폴리오 PDF(가로 슬라이드 덱) 빌드
+// index.html 본문/목업을 그대로 가져와 slideify.js가 크롬 DOM에서 좌 텍스트 / 우 목업
+// 가로 슬라이드로 재조립 → 헤드리스 크롬으로 portfolio.pdf 렌더.
 import fs from 'fs';
 
 const src = fs.readFileSync('index.html', 'utf8');
 const css = src.match(/<style>([\s\S]*?)<\/style>/)[1];
 const articles = src.match(/<main class="content">([\s\S]*?)<\/main>/)[1];
-
-const cover = `
-<section class="cover">
-  <div class="cv-top">
-    <div class="cv-eyebrow">PORTFOLIO · AX PRODUCT DESIGN</div>
-    <h1 class="cv-name">차윤건</h1>
-    <div class="cv-role">HR SaaS 프로덕트 디자이너</div>
-    <p class="cv-desc">레퍼런스 체크를 시작으로 진단·분석 플랫폼까지<br>HR SaaS 제품을 확장해왔습니다.</p>
-  </div>
-  <div class="cv-bottom">
-    <div class="cv-meta">
-      <div><span>담당</span><b>프로덕트 디자인 · 리딩</b></div>
-      <div><span>도메인</span><b>HR SaaS · 인재 검증·채용</b></div>
-      <div><span>기간</span><b>2019 – 최근</b></div>
-    </div>
-    <div class="cv-toc">
-      <div class="cv-toc-item"><span class="cn">01</span><b>확장형 진단 플랫폼</b><i>진단 Core 모듈화 · 데이터 연결</i></div>
-      <div class="cv-toc-item"><span class="cn">02</span><b>평가의 변별력을 높이다</b><i>점수 → 순위 기반 평가 전환</i></div>
-      <div class="cv-toc-item"><span class="cn">03</span><b>디자인–개발 AX</b><i>AI 기반 워크플로우 구축</i></div>
-    </div>
-  </div>
-</section>`;
+const slideify = fs.readFileSync('slideify.js', 'utf8');
 
 const overrides = `
-  /* ===== PDF 문서 전용 오버라이드 ===== */
+  /* ===== 가로 슬라이드 덱 오버라이드 ===== */
+  @page { size: A4 landscape; margin: 0; }
+  @media print { @page { size: A4 landscape; margin: 0; } }
   html { scroll-behavior: auto; }
-  body { background: #fff; }
-  .doc { display: block !important; }
-  /* 화면 미리보기용 문서 폭(인쇄 시엔 @page 여백이 지배) */
-  .content { max-width: 726px; margin: 0 auto; padding: 40px 26px 70px; }
-  .printfoot { display: none; }
+  body { background: #fff; margin: 0; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 
-  /* 표지 (다크 · 리터럴 컬러 고정) */
-  .cover {
-    break-after: page; page-break-after: always;
-    background: #1c1c1f; color: #fafafa;
-    min-height: 258mm; padding: 34mm 24mm 26mm;
-    display: flex; flex-direction: column;
-    letter-spacing: -0.01em;
-    -webkit-print-color-adjust: exact; print-color-adjust: exact;
-  }
-  .cv-eyebrow { font-size: 11pt; letter-spacing: .22em; color: #86868e; font-weight: 700; }
-  .cv-name { font-size: 52pt; font-weight: 800; letter-spacing: -.045em; margin: 13mm 0 0; line-height: 1; }
-  .cv-role { font-size: 16pt; color: #d2d2d9; margin-top: 7mm; font-weight: 600; letter-spacing: -.02em; }
-  .cv-desc { font-size: 12.5pt; color: #a7a7ae; line-height: 1.72; margin: 9mm 0 0; }
-  .cv-bottom { margin-top: auto; }
-  .cv-meta { display: flex; gap: 12mm; border-top: 1px solid #3b3b42; border-bottom: 1px solid #3b3b42; padding: 6mm 0; margin-bottom: 9mm; }
-  .cv-meta > div { display: flex; flex-direction: column; gap: 2.5mm; }
+  .slide, .cover2 { position: relative; width: 297mm; height: 208.5mm; box-sizing: border-box;
+    overflow: hidden; background: #fff; break-after: page; page-break-after: always; break-inside: avoid; letter-spacing: -0.01em; }
+  .deck > :last-child { break-after: auto; page-break-after: auto; }
+  .slide { padding: 14mm 18mm; display: flex; flex-direction: column; justify-content: center; }
+  .slide-split { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 13mm; width: 100%; align-items: center; }
+  .slide-full { display: flex; flex-direction: column; justify-content: center; }
+  .s-left { min-width: 0; } .s-right { min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+
+  .s-eyebrow { font-size: 8.5pt; letter-spacing: .16em; text-transform: uppercase; color: var(--faint); font-weight: 800; margin: 0 0 5mm; }
+  .s-lead { font-size: 10.5pt; line-height: 1.7; color: var(--muted); margin: 0 0 5mm; }
+  .s-h { font-size: 18pt; font-weight: 800; letter-spacing: -.03em; line-height: 1.16; margin: 0 0 4mm; }
+  .s-h .s-num { color: var(--faint); font-weight: 800; margin-right: 3mm; }
+  .s-title-big { font-size: 29pt; font-weight: 800; letter-spacing: -.035em; line-height: 1.08; margin: 0 0 4mm; }
+  .slide-full .s-title-big { font-size: 22pt; }
+  .s-body p { font-size: 10pt; line-height: 1.68; color: var(--muted); margin: 0 0 2.6mm; }
+  .s-body p:last-child { margin-bottom: 0; }
+  .s-body p strong { color: var(--fg); font-weight: 650; }
+
+  .s-visual { width: 100%; }
+  .s-visual .shot, .s-visual .fig { margin: 0 !important; width: 100%; box-shadow: var(--shadow2); }
+  .s-right .shot .stage { padding: 16px; }
+
+  /* 좌측 KPI(세로 스택) */
+  .kpi-wrap { margin-top: 5mm; }
+  .kpi-wrap .kpis { grid-template-columns: 1fr; gap: 4mm; margin: 0; }
+  .kpi-big .kpis .stat { padding: 5mm 6mm; }
+  .kpi-big .kpis .v { font-size: 20pt; }
+
+  /* 우측 소개 카드류 */
+  .s-wrap .plist { margin-top: 4mm; gap: 3.5mm; }
+  .s-wrap .arc { margin-top: 4mm; gap: 3.5mm; }
+  .s-wrap .strengths { grid-template-columns: 1fr 1fr; margin-top: 4mm; gap: 3.5mm; }
+
+  /* 카드형(해결전략 / 세부 성과) */
+  .s-cards { display: grid; gap: 6mm; margin-top: 7mm; }
+  .s-cards.c1 { grid-template-columns: 1fr; max-width: 210mm; }
+  .s-cards.c3 { grid-template-columns: repeat(3, 1fr); }
+  .s-cards.c4 { grid-template-columns: repeat(2, 1fr); max-width: 220mm; }
+  .s-card { border: 1px solid var(--border); border-radius: 13px; background: var(--card); padding: 6mm 6.5mm; }
+  .s-card .s-card-h { display: flex; align-items: baseline; gap: 3mm; margin-bottom: 3mm; }
+  .s-card .s-card-h .n { font-size: 9pt; font-weight: 800; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .s-card .s-card-h b { font-size: 12.5pt; font-weight: 750; letter-spacing: -.01em; }
+  .s-card p { font-size: 10pt; line-height: 1.62; color: var(--muted); margin: 0 0 2mm; }
+  .s-card p:last-child { margin: 0; }
+  .s-card p strong { color: var(--fg); font-weight: 650; }
+
+  /* 프로젝트 타이틀 슬라이드 */
+  .s-kws { display: flex; flex-wrap: wrap; gap: 2mm; margin-top: 7mm; }
+  .s-kws span { font-size: 9pt; font-weight: 600; color: var(--muted); background: var(--subtle); border: 1px solid var(--border); border-radius: 999px; padding: 1.6mm 3.6mm; }
+  .s-agenda { display: flex; flex-direction: column; }
+  .s-agenda .ag { display: flex; align-items: baseline; gap: 5mm; padding: 4.4mm 0; border-bottom: 1px solid var(--border); }
+  .s-agenda .ag:last-child { border-bottom: 0; }
+  .s-agenda .ag .agn { font-size: 10pt; font-weight: 800; color: var(--faint); width: 8mm; font-variant-numeric: tabular-nums; }
+  .s-agenda .ag b { font-size: 14pt; font-weight: 700; letter-spacing: -.02em; }
+
+  /* 슬라이드 하단 푸터 */
+  .s-foot { position: absolute; left: 18mm; right: 18mm; bottom: 8mm; display: flex; justify-content: space-between;
+    font-size: 8pt; color: var(--faint); letter-spacing: .02em; }
+
+  /* 표지 (가로 2단) */
+  .cover2 { display: grid; grid-template-columns: 1.25fr 1fr; }
+  .cover2 .cv-main { background: #1c1c1f; color: #fafafa; padding: 30mm; display: flex; flex-direction: column; justify-content: center; }
+  .cover2 .cv-side { background: #232327; color: #fafafa; padding: 30mm 26mm; display: flex; flex-direction: column; justify-content: center; }
+  .cv-eyebrow { font-size: 10pt; letter-spacing: .2em; color: #86868e; font-weight: 700; }
+  .cv-name { font-size: 46pt; font-weight: 800; letter-spacing: -.045em; margin: 11mm 0 0; line-height: 1; }
+  .cv-role { font-size: 15pt; color: #d2d2d9; margin-top: 6mm; font-weight: 600; letter-spacing: -.02em; }
+  .cv-desc { font-size: 11.5pt; color: #a7a7ae; line-height: 1.7; margin: 8mm 0 0; }
+  .cv-meta { display: flex; flex-direction: column; gap: 5mm; border-bottom: 1px solid #3b3b42; padding-bottom: 8mm; margin-bottom: 8mm; }
+  .cv-meta > div { display: flex; flex-direction: column; gap: 2mm; }
   .cv-meta span { font-size: 8pt; letter-spacing: .12em; color: #7c7c84; text-transform: uppercase; font-weight: 700; }
-  .cv-meta b { font-size: 10.5pt; color: #fafafa; font-weight: 650; letter-spacing: -.01em; }
+  .cv-meta b { font-size: 11pt; color: #fafafa; font-weight: 650; letter-spacing: -.01em; }
   .cv-toc-item { display: flex; align-items: baseline; gap: 5mm; padding: 3.6mm 0; border-bottom: 1px solid #303035; }
   .cv-toc-item:last-child { border-bottom: 0; }
-  .cv-toc-item .cn { font-size: 10pt; font-weight: 800; color: #7c7c84; font-variant-numeric: tabular-nums; width: 8mm; flex-shrink: 0; }
+  .cv-toc-item .cn { font-size: 10pt; font-weight: 800; color: #7c7c84; width: 8mm; font-variant-numeric: tabular-nums; }
   .cv-toc-item b { font-size: 13pt; font-weight: 700; letter-spacing: -.02em; }
-  .cv-toc-item i { margin-left: auto; font-style: normal; font-size: 10pt; color: #9a9aa2; text-align: right; }
-
-  @media print {
-    /* 표지 다음 각 프로젝트를 새 페이지로 (인트로 포함) */
-    .content { max-width: none; margin: 0; padding: 0; }
-    .doc:first-of-type { break-before: auto; }
-    .cover { min-height: 0; height: 260mm; }
-    .printfoot { display: block !important; }
-    /* 카드 리스트는 페이지 경계에서 자유롭게 흐르게(개별 카드는 원본 CSS에서 이미 atomic).
-       컨테이너 통째로 다음 페이지로 밀려 큰 여백이 생기던 문제 해결 */
-    .plist, .arc, .strengths, .jlist, .cmp, .dists, .barcmp, .grid2,
-    .ranklist, .barsopt, .kws, .kpis { break-inside: auto; }
-    /* 섹션 제목이 페이지 하단에 홀로 남지 않도록 뒤 문단과 함께 */
-    h2.sec { break-after: avoid; }
-    .lead { orphans: 2; widows: 2; }
-  }
 `;
 
 const html = `<!doctype html>
@@ -88,11 +103,10 @@ const html = `<!doctype html>
 ${overrides}</style>
 </head>
 <body>
-${cover}
 <main class="content">${articles}</main>
-<div class="printfoot">차윤건 · 포트폴리오 · HR SaaS 프로덕트 디자인</div>
+<script>${slideify}</script>
 </body>
 </html>`;
 
 fs.writeFileSync('portfolio-print.html', html);
-console.log('portfolio-print.html 생성 완료 (' + (html.length / 1024).toFixed(0) + 'KB)');
+console.log('portfolio-print.html 생성 (' + (html.length / 1024).toFixed(0) + 'KB)');
