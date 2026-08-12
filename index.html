@@ -375,13 +375,14 @@
   @media (max-width: 640px) { .plist { grid-template-columns: 1fr; } .cmpflow { flex-direction: column; } .cnode { max-width: none; width: 100%; } }
 
   /* ── 프로젝트 하단 이전/다음 페이저 ── */
-  .pager { display: flex; gap: 12px; margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--border); }
-  .pg { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 5px; padding: 15px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); transition: border-color .12s, background .12s; }
+  .pager { display: flex; gap: 10px; margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--border); }
+  .pg { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 2px; padding: 9px 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--card); transition: border-color .12s, background .12s; }
   .pg:hover { border-color: var(--border2); background: var(--hover); }
-  .pg.next { text-align: right; align-items: flex-end; }
-  .pg .pgd { font-size: 12px; color: var(--faint); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
-  .pg .pgt { font-size: 15px; font-weight: 700; letter-spacing: -.01em; color: var(--fg); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  @media (max-width: 520px) { .pager { flex-direction: column; } }
+  .pg.prev { align-items: flex-start; text-align: left; }
+  .pg.next { align-items: flex-end; text-align: right; }
+  .pg .pgd { font-size: 11px; color: var(--faint); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .pg .pgt { font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; color: var(--fg); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  @media (max-width: 520px) { .pager { flex-direction: column; } .pg.next { align-items: flex-start; text-align: left; } }
 
   /* ── PDF(인쇄) 전용 레이아웃 ── */
   .printfoot { display: none; }
