@@ -384,6 +384,17 @@
   .pg .pgt { font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; color: var(--fg); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   @media (max-width: 520px) { .pager { flex-direction: column; } .pg.next { align-items: flex-start; text-align: left; } }
 
+  /* ── 용어 사전(툴팁) ── */
+  .term { border-bottom: 1px dashed var(--border2); cursor: help; transition: color .12s, border-color .12s; }
+  .term:hover, .term:focus-visible { color: var(--fg); border-bottom-color: var(--faint); outline: none; }
+  .term:focus-visible { border-radius: 2px; box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg) 22%, transparent); }
+  .glosstip { position: fixed; z-index: 200; max-width: 264px; background: var(--fg); color: var(--bg); font-size: 12.5px; line-height: 1.55; padding: 10px 12px; border-radius: 11px; box-shadow: var(--shadow2); letter-spacing: -.01em; opacity: 0; transform: translateY(3px); pointer-events: none; transition: opacity .13s ease, transform .13s ease; }
+  .glosstip.on { opacity: 1; transform: none; }
+  .glosstip b { display: block; font-size: 12.5px; font-weight: 700; margin-bottom: 3px; letter-spacing: -.01em; }
+  .glosstip::after { content: ""; position: absolute; left: var(--ax, 50%); bottom: -5px; width: 10px; height: 10px; background: var(--fg); transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
+  .glosstip.below::after { bottom: auto; top: -5px; }
+  @media (prefers-reduced-motion: reduce) { .glosstip { transition: none; } }
+
   /* ── PDF(인쇄) 전용 레이아웃 ── */
   .printfoot { display: none; }
   @media print {
@@ -463,11 +474,11 @@
             <p class="desc">레퍼런스 체크를 시작으로 진단·분석 플랫폼까지 HR SaaS를 확장해왔습니다.</p>
           </div></div>
 
-          <h2 class="sec" id="d0-overview">소개</h2>
-          <p class="lead">기업이 인재를 채용하고, 검증하고, 관리하는 과정에서 발생하는 데이터를 수집·분석해 의사결정을 돕는 HR SaaS 서비스입니다.</p>
-          <p class="lead">기존에는 진단별로 제품이 분리되어 데이터가 단절되어 있었습니다. 이 포트폴리오에서는 흩어진 진단과 데이터를 하나의 경험으로 연결하고, 이를 확장해온 과정을 다룹니다.</p>
+          <h2 class="sec" id="d0-overview">포트폴리오에서 풀어나갈 내용</h2>
+          <p class="lead">기업이 인재를 채용하고, 검증하고, 관리하는 과정에서 발생하는 데이터를 수집·분석해 더 나은 의사결정을 돕는 HR SaaS입니다.</p>
+          <p class="lead">다만 그동안은 진단별로 제품이 분리되어 데이터가 서로 단절되어 있었습니다. 이 포트폴리오에서는 흩어져 있던 진단과 데이터를 하나의 경험으로 연결하고, 이를 확장해온 과정을 풀어냅니다.</p>
 
-          <h2 class="sec" id="d0-products">프로덕트</h2>
+          <h2 class="sec" id="d0-products">참여하거나 리딩한 프로덕트</h2>
           <p class="lead">채용부터 재직, 퇴직까지. 구성원과 조직을 다양한 관점에서 진단하고, 흩어진 데이터를 연결해 더 나은 인재 의사결정을 돕는 제품들을 만들었습니다.</p>
           <div class="plist">
             <div class="pcard">
@@ -497,7 +508,7 @@
             </div>
           </div>
 
-          <h2 class="sec" id="d0-role">역할</h2>
+          <h2 class="sec" id="d0-role">주요 경험</h2>
           <p class="lead"><strong>프로덕트 디자이너로서 초기 단계부터 제품을 리딩</strong>하며, 전화로만 이루어지던 레퍼런스 체크의 DX 전환부터 제품 확장과 플랫폼 통합, 최근의 AX 전환까지 제품이 성장하고 변화하는 전 과정을 함께했습니다.</p>
           <div class="arc">
             <div class="astep"><div class="ay">2019 · DX 전환</div><div class="ah">프로젝트 참여</div><div class="ap">전화 중심으로 이루어지던 레퍼런스 체크를 웹 기반 서비스로 전환하는 과정에 참여했습니다.</div></div>
@@ -945,6 +956,139 @@
     });
 
     show(0);
+  })();
+
+  // ── 용어 사전(툴팁): 어려운 용어에 마우스 오버/탭 시 설명 ──
+  (function () {
+    var G = {
+      "HR SaaS": "기업의 인사 업무를 돕는 소프트웨어를 인터넷으로 제공하는 서비스",
+      "SaaS": "프로그램을 따로 설치하지 않고 인터넷으로 사용하는 소프트웨어",
+      "HR 라이프사이클": "한 구성원이 채용·입사한 뒤 재직하고 퇴사하기까지의 전체 과정",
+      "UX": "사용자가 제품이나 서비스를 이용하면서 겪는 전체 경험",
+      "UI": "사용자가 화면에서 보고 직접 조작하는 버튼·메뉴·입력창 등 화면 요소",
+      "Core": "여러 기능과 서비스가 공통으로 사용하는 핵심 시스템",
+      "플랫폼": "여러 기능·서비스를 하나의 기반 위에서 확장할 수 있도록 만든 시스템",
+      "리드타임": "일을 시작한 뒤 실제 결과물이 나오기까지 걸리는 시간",
+      "하드코딩": "내용을 쉽게 변경할 수 없도록 프로그램 코드에 직접 고정해 만드는 방식",
+      "프리셋": "자주 사용하는 설정이나 구성을 미리 저장해두고 다시 사용하는 기능",
+      "정합성": "서로 다른 데이터나 결과가 서로 얼마나 일치하는지를 나타내는 정도",
+      "피드백 루프": "이전 결과를 다시 분석해 다음 결과를 계속 개선하는 구조",
+      "횡적": "하나의 시스템 안에서 새로운 진단이나 기능을 계속 추가해 나가는 확장 방식",
+      "종적": "한 사람의 시간 흐름에 따라 여러 시점의 진단·데이터를 연결해 나가는 확장 방식",
+      "PLG": "제품을 직접 경험하게 해 사용자가 자연스럽게 다른 기능·상품으로 확장하도록 만드는 성장 방식 (Product-Led Growth)",
+      "퍼널": "사용자가 서비스를 처음 접한 뒤 실제 이용·구매까지 이어지는 단계별 흐름",
+      "비즈니스 모델": "기업이 상품이나 서비스를 통해 수익을 만들어내는 방식",
+      "B2B": "기업을 대상으로 상품이나 서비스를 제공하는 비즈니스",
+      "DX": "디지털 기술을 활용해 기존의 업무 방식이나 서비스를 개선하는 것",
+      "AX": "AI를 활용해 기존의 업무 방식이나 제품을 더 효율적으로 바꾸는 것",
+      "0→1": "아무것도 없는 상태에서 새로운 제품이나 기능을 처음으로 만들어내는 과정",
+      "프로토타입": "실제 제품을 완성하기 전에 아이디어를 빠르게 구현해 검증하는 시안",
+      "프로토타이핑": "실제 제품 완성 전에 아이디어를 빠르게 구현해 사용성과 기능을 검증하는 과정",
+      "기술 스택": "하나의 제품을 만들기 위해 사용하는 개발 기술과 도구의 조합",
+      "컴포넌트": "버튼·카드·입력창처럼 여러 화면에서 반복해서 사용하도록 만든 UI 요소",
+      "디자인 시스템": "제품 전체에서 반복해서 사용하는 UI 요소와 디자인 규칙을 모아둔 체계",
+      "인터랙션": "사용자가 화면의 요소를 조작했을 때 화면이나 기능이 반응하는 방식",
+      "정성적": "숫자로 표현하기 어려운 사람의 의견·경험·사례 등에 관한 것",
+      "방사형 그래프": "여러 평가 항목의 점수를 하나의 그래프에서 비교하도록 표현한 방식",
+      "MCP": "AI가 Figma 같은 외부 프로그램의 정보·기능을 활용하도록 연결하는 표준 방식 (Model Context Protocol)",
+      "LLM": "사람의 언어를 이해하고 글이나 코드를 생성할 수 있는 AI 모델",
+      "Design Token": "색상·글자 크기·여백·모서리 둥글기 등 디자인 공통 규칙을 저장해두는 값",
+      "Spec": "개발자가 제품을 구현할 수 있도록 기능·화면 동작을 구체적으로 정의한 문서",
+      "핸드오프": "디자이너가 만든 디자인을 개발자가 구현할 수 있도록 전달하는 과정",
+      "Live Preview": "코드를 수정한 결과를 실제 화면처럼 바로 확인할 수 있는 기능",
+      "Next.js": "웹 서비스를 만들 때 사용하는 개발 프레임워크",
+      "Supabase": "데이터베이스·로그인 등 웹 서비스에 필요한 기능을 제공하는 개발 플랫폼",
+      "Vercel": "웹 서비스를 인터넷에 배포하고 운영할 수 있도록 도와주는 플랫폼",
+      "Figma": "웹과 앱의 화면을 디자인하고 협업할 수 있는 디자인 도구",
+      "Cursor": "AI를 활용해 코드를 작성하고 수정할 수 있는 개발 도구",
+      "Claude": "글 작성·분석·코딩 등을 수행할 수 있는 AI 모델",
+      "BARS": "실제 행동이나 상황을 기준으로 사람의 역량·성과를 평가하는 방식",
+      "리커트 척도": "질문에 대해 1~5점처럼 정해진 점수를 선택해 평가하는 방식",
+      "Rank-order": "여러 항목에 같은 점수를 주는 대신 가장 우수한 항목부터 순서대로 나열하는 평가 방식",
+      "Decoupling": "서로 다른 평가 목적을 분리해 각각 독립적으로 판단하도록 만드는 것",
+      "Contextual Linking": "평가 결과와 실제 업무 사례를 연결해 결과가 나온 맥락을 함께 확인하는 방식",
+      "변별력": "여러 평가 대상의 차이와 강점·약점을 얼마나 명확하게 구분할 수 있는지를 나타내는 정도",
+      "신뢰성": "데이터나 평가가 실제 상황을 얼마나 정확하고 일관되게 반영하는지를 나타내는 정도",
+      "인지 부하": "사용자가 정보를 이해하거나 판단하기 위해 머릿속으로 들여야 하는 노력",
+      "워크플로우": "업무가 시작되어 결과물이 완성되기까지 이어지는 작업 과정",
+      "기능 명세서": "제품이 어떤 기능을 제공하고 어떻게 동작해야 하는지를 구체적으로 정리한 문서",
+      "교차 비교": "서로 다른 데이터나 평가 결과를 함께 비교해 차이나 공통점을 확인하는 것",
+      "리커트": "질문에 대해 1~5점처럼 정해진 점수를 선택해 평가하는 방식"
+    };
+    var terms = Object.keys(G).sort(function (a, b) { return b.length - a.length; });
+    function isLatin(s) { return /[A-Za-z0-9]/.test(s); }
+    function alnum(c) { return c && /[A-Za-z0-9]/.test(c); }
+    function findAt(text, term) {
+      var lat = isLatin(term), from = 0, i;
+      while ((i = text.indexOf(term, from)) >= 0) {
+        if (lat && (alnum(text[i - 1]) || alnum(text[i + term.length]))) { from = i + 1; continue; }
+        return i;
+      }
+      return -1;
+    }
+    function makeSpan(term) {
+      var s = document.createElement("span");
+      s.className = "term"; s.tabIndex = 0; s.setAttribute("role", "button");
+      s.setAttribute("data-term", term); s.setAttribute("data-def", G[term]);
+      s.setAttribute("aria-label", term + ": " + G[term]);
+      s.textContent = term;
+      return s;
+    }
+    function processNode(node, used) {
+      var text = node.nodeValue, best = null;
+      for (var t = 0; t < terms.length; t++) {
+        var term = terms[t]; if (used[term]) continue;
+        var idx = findAt(text, term);
+        if (idx < 0) continue;
+        if (!best || idx < best.idx || (idx === best.idx && term.length > best.term.length)) best = { idx: idx, term: term };
+      }
+      if (!best) return;
+      used[best.term] = true;
+      var after = node.splitText(best.idx);
+      after.nodeValue = after.nodeValue.substring(best.term.length);
+      node.parentNode.insertBefore(makeSpan(best.term), after);
+      processNode(after, used);
+    }
+    var SEL = ".desc, .lead, .item > p, .item .h b, .pcard > p, .pcard .ptag, .scard p, .astep .ap, .jcard p, .eg";
+    [].forEach.call(document.querySelectorAll('.doc'), function (doc) {
+      var used = {};
+      [].forEach.call(doc.querySelectorAll(SEL), function (el) {
+        var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null), nodes = [], n;
+        while ((n = w.nextNode())) nodes.push(n);
+        nodes.forEach(function (node) {
+          if (!node.nodeValue.trim()) return;
+          if (node.parentNode && node.parentNode.closest && node.parentNode.closest(".term")) return;
+          processNode(node, used);
+        });
+      });
+    });
+
+    // 툴팁
+    var tip = document.createElement("div");
+    tip.className = "glosstip"; tip.setAttribute("role", "tooltip");
+    document.body.appendChild(tip);
+    var cur = null;
+    function place(el) {
+      var r = el.getBoundingClientRect();
+      tip.style.left = "0px"; tip.style.top = "0px"; tip.classList.remove("below");
+      var tr = tip.getBoundingClientRect();
+      var left = r.left + r.width / 2 - tr.width / 2;
+      left = Math.max(10, Math.min(left, window.innerWidth - tr.width - 10));
+      var top = r.top - tr.height - 10, below = false;
+      if (top < 10) { top = r.bottom + 10; below = true; tip.classList.add("below"); }
+      tip.style.left = left + "px"; tip.style.top = top + "px";
+      tip.style.setProperty("--ax", (r.left + r.width / 2 - left) + "px");
+    }
+    function show(el) { cur = el; tip.innerHTML = "<b></b>"; tip.firstChild.textContent = el.getAttribute("data-term"); tip.appendChild(document.createTextNode(el.getAttribute("data-def"))); tip.classList.add("on"); place(el); }
+    function hide() { cur = null; tip.classList.remove("on"); }
+    document.addEventListener("mouseover", function (e) { var t = e.target.closest && e.target.closest(".term"); if (t && t !== cur) show(t); });
+    document.addEventListener("mouseout", function (e) { var t = e.target.closest && e.target.closest(".term"); if (t && !e.relatedTarget) hide(); else if (t && e.relatedTarget && !t.contains(e.relatedTarget)) hide(); });
+    document.addEventListener("focusin", function (e) { var t = e.target.closest && e.target.closest(".term"); if (t) show(t); });
+    document.addEventListener("focusout", function (e) { var t = e.target.closest && e.target.closest(".term"); if (t) hide(); });
+    document.addEventListener("click", function (e) { var t = e.target.closest && e.target.closest(".term"); if (t) { e.preventDefault(); if (cur === t) hide(); else show(t); } else if (cur) hide(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hide(); });
+    window.addEventListener("scroll", function () { if (cur) hide(); }, true);
+    window.addEventListener("resize", function () { if (cur) hide(); });
   })();
 </script>
 </body>
