@@ -29,9 +29,9 @@
           '<div><span>기간</span><b>2019 – 최근</b></div>' +
         '</div>' +
         '<div class="cv-toc">' +
-          '<div class="cv-toc-item"><span class="cn">01</span><b>진단 사업 확장</b></div>' +
-          '<div class="cv-toc-item"><span class="cn">02</span><b>진단 변별력 개선</b></div>' +
-          '<div class="cv-toc-item"><span class="cn">03</span><b>AX를 통한 워크플로우 개선</b></div>' +
+          '<div class="cv-toc-item"><span class="cn">01</span><b>진단 플랫폼 사업화</b></div>' +
+          '<div class="cv-toc-item"><span class="cn">02</span><b>평가 변별력 확보</b></div>' +
+          '<div class="cv-toc-item"><span class="cn">03</span><b>제품 개발 AX 전환</b></div>' +
         '</div>' +
       '</div>' +
     '</section>'));
