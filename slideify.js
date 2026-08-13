@@ -29,7 +29,7 @@
           '<div><span>기간</span><b>2019 – 최근</b></div>' +
         '</div>' +
         '<div class="cv-toc">' +
-          '<div class="cv-toc-item"><span class="cn">01</span><b>진단 플랫폼 사업화</b></div>' +
+          '<div class="cv-toc-item"><span class="cn">01</span><b>서비스 통합 플랫폼 개발</b></div>' +
           '<div class="cv-toc-item"><span class="cn">02</span><b>평가 변별력 확보</b></div>' +
           '<div class="cv-toc-item"><span class="cn">03</span><b>제품 개발 AX 전환</b></div>' +
         '</div>' +
@@ -144,8 +144,21 @@
           deck.appendChild(s2);
         }
         deck.appendChild(cardsSlide(sec.title + ' · 세부 성과', '', sec.items));
-      } else if (sec.items.length) {
-        deck.appendChild(cardsSlide(sec.title, intro, sec.items));
+      } else {
+        // 일반 섹션: 목업(fig/shot) 있으면 좌 텍스트/우 도식, 항목 있으면 카드, 텍스트만이면 전문 슬라이드
+        var vsec = sec.others.filter(function (o) { return o.matches('.fig, .shot'); })[0];
+        if (vsec) {
+          var sg = slide('slide-split',
+            '<div class="s-left"><div class="s-eyebrow">' + sec.title + '</div><div class="s-body">' + leadsHTML(sec) + '</div></div>' +
+            '<div class="s-right"><div class="s-visual"></div></div>');
+          sg.querySelector('.s-visual').appendChild(vsec.cloneNode(true));
+          deck.appendChild(sg);
+        } else if (sec.items.length) {
+          deck.appendChild(cardsSlide(sec.title, intro, sec.items));
+        } else if (sec.leads.length) {
+          deck.appendChild(slide('slide-full',
+            '<div class="s-eyebrow">' + sec.title + '</div><div class="s-body" style="max-width:165mm;font-size:11pt;line-height:1.75">' + leadsHTML(sec) + '</div>'));
+        }
       }
     });
   });

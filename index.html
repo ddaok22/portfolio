@@ -197,6 +197,9 @@
   .pipe { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; }
   .node { display: inline-flex; align-items: center; gap: 8px; padding: 11px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg); font-weight: 650; font-size: 13.5px; box-shadow: var(--shadow); }
   .node.dash { border-style: dashed; box-shadow: none; color: var(--muted); font-weight: 600; }
+  .node.lc { flex-direction: column; gap: 2px; padding: 9px 15px; }
+  .node.lc .lct2 { font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
+  .node.lc .lcs2 { font-size: 10.5px; font-weight: 500; color: var(--muted); }
   .node i { width: 8px; height: 8px; border-radius: 50%; } .pipe .ar { color: var(--faint); }
   .barcmp { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
   .barcmp .t { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 12px; text-align: center; }
@@ -249,6 +252,14 @@
   .fig { margin-top: 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); overflow: hidden; }
   .fig .fbody { padding: 26px 22px; }
   .fig .fcap { border-top: 1px solid var(--border); padding: 11px 16px; font-size: 12.5px; color: var(--faint); text-align: center; }
+  /* 디자이너 역할 범위 비교 */
+  .rolecmp { display: grid; gap: 12px; max-width: 560px; margin: 0 auto; }
+  .rc-row { display: flex; align-items: center; gap: 14px; }
+  .rc-lab { width: 58px; flex-shrink: 0; font-size: 12px; font-weight: 700; color: var(--faint); text-align: right; }
+  .rc-flow { flex: 1; display: flex; align-items: center; gap: 8px; }
+  .rc-node { flex: 1; text-align: center; font-size: 12.5px; padding: 10px 6px; border: 1px solid var(--border); border-radius: 9px; background: var(--bg); color: var(--muted); }
+  .rc-node.rc-own { border-color: color-mix(in srgb, var(--hire) 45%, transparent); background: color-mix(in srgb, var(--hire) 9%, transparent); color: var(--fg); font-weight: 650; }
+  .rc-node.rc-wide { flex: 2.4; }
   .hbar { display: flex; align-items: center; gap: 16px; max-width: 520px; margin: 0 auto; } .hbar + .hbar { margin-top: 13px; }
   .hbar .hl { width: 68px; font-size: 13px; color: var(--muted); flex-shrink: 0; }
   .hbar .ht { flex: 1; height: 12px; border-radius: 6px; background: var(--subtle); overflow: hidden; }
@@ -459,7 +470,7 @@
       </div>
       <div class="grp">
         <div class="lbl">프로젝트</div>
-        <a href="#" data-goto="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg><span class="tx">진단 플랫폼 사업화</span><span class="no">01</span></a>
+        <a href="#" data-goto="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg><span class="tx">서비스 통합 플랫폼 개발</span><span class="no">01</span></a>
         <a href="#" data-goto="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="14" width="3" height="4"/></svg><span class="tx">평가 변별력 확보</span><span class="no">02</span></a>
         <a href="#" data-goto="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.7 4.5L18 9.2l-4.3 1.7L12 15l-1.7-4.1L6 9.2l4.3-1.7z"/><path d="M18 15l.9 2.3L21 18l-2.1.7L18 21l-.9-2.3L15 18l2.1-.7z"/></svg><span class="tx">제품 개발 AX 전환</span><span class="no">03</span><!-- nav03 --></a>
       </div>
@@ -539,7 +550,7 @@
           <h2 class="sec" id="d0-map">이 포트폴리오에서 다루는 것</h2>
           <p class="lead">하나의 HR 서비스를 확장하며 마주한 세 가지 문제를 담았습니다. 제품을 확장하고, 데이터를 고도화하고, 제품을 만드는 방식까지 바꾼 과정을 프로젝트별로 소개합니다.</p>
           <div class="jlist">
-            <a class="jcard" href="#" data-goto="1"><span class="jn">PROJECT 01</span><b>진단 플랫폼 사업화</b><p>진단 Core를 모듈화해 제품과 데이터를 확장할 수 있는 플랫폼을 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
+            <a class="jcard" href="#" data-goto="1"><span class="jn">PROJECT 01</span><b>서비스 통합 플랫폼 개발</b><p>진단 Core를 모듈화해 제품과 데이터를 확장할 수 있는 플랫폼을 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
             <a class="jcard" href="#" data-goto="2"><span class="jn">PROJECT 02</span><b>평가 변별력 확보</b><p>점수 중심 평가를 순위 기반으로 전환해 변별력 있는 평가 데이터를 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
             <a class="jcard" href="#" data-goto="3"><span class="jn">PROJECT 03</span><b>제품 개발 AX 전환</b><p>AI 기반 워크플로우로 디자인–개발 사이의 반복 작업을 줄이고 제품 검증 속도를 높였습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
           </div>
@@ -548,13 +559,13 @@
         <!-- ============ DOC 1 ============ -->
         <article class="doc" data-doc="1">
           <div class="doc-top">
-            <div><div class="eyebrow">PROJECT <b>01</b></div><h1>진단 플랫폼 사업화</h1><p class="desc">진단 Core를 모듈화하고 데이터를 연계해 개별 서비스를 하나의 플랫폼으로 통합함으로써, 비즈니스 모델의 확장성을 높이고 유지보수 비용을 절감했습니다.</p></div>
+            <div><div class="eyebrow">PROJECT <b>01</b></div><h1>서비스 통합 플랫폼 개발</h1><p class="desc">진단 Core를 모듈화하고 데이터를 연계해 개별 서비스를 하나의 플랫폼으로 통합함으로써, 비즈니스 모델의 확장성을 높이고 유지보수 비용을 절감했습니다.</p></div>
           </div>
           <div class="kws"><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>기획~런칭 전 과정 주도</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>비즈니스와 UX의 균형 설계</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>플랫폼 구조 설계</span></div>
 
           <h2 class="sec" id="d1-pain">문제 정의</h2>
           <p class="lead">기존 제품은 레퍼런스 체크와 개별 진단에 머물러 있었고, 제품 확장과 데이터 연결을 가로막는 세 가지 구조적 한계가 있었습니다.</p>
-          <div class="item"><div class="h"><span class="n">01</span><b>단발성 제품 구조로 인한 확장의 한계</b></div><p>기존 제품은 레퍼런스 체크와 개별 진단에 머물러 있어, 한 인재의 입사 전부터 퇴사까지 이어지는 HR 라이프사이클로 제품을 확장하기 어려웠습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node">레퍼런스 체크</span><span class="ar">·</span><span class="node dash" style="opacity:.55">입사</span><span class="ar">·</span><span class="node dash" style="opacity:.55">근무</span><span class="ar">·</span><span class="node dash" style="opacity:.55">퇴사</span></div></div><div class="fcap">단발 진단 · 라이프사이클 한 지점에 고립</div></div></div>
+          <div class="item"><div class="h"><span class="n">01</span><b>단발성 제품 구조로 인한 확장의 한계</b></div><p>기존 제품은 레퍼런스 체크와 개별 진단에 머물러 있어, 한 인재의 입사 전부터 퇴사까지 이어지는 HR 라이프사이클로 제품을 확장하기 어려웠습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node lc"><span class="lct2">입사 전</span><span class="lcs2">레퍼런스 체크</span></span><span class="ar">·</span><span class="node lc dash" style="opacity:.55"><span class="lct2">입사 후</span><span class="lcs2">다면진단</span></span><span class="ar">·</span><span class="node lc dash" style="opacity:.55"><span class="lct2">근무</span><span class="lcs2">조직문화진단</span></span><span class="ar">·</span><span class="node lc dash" style="opacity:.55"><span class="lct2">퇴사</span><span class="lcs2">퇴직리뷰</span></span></div></div><div class="fcap">단발 진단 · 라이프사이클 한 지점에 고립</div></div></div>
           <div class="item"><div class="h"><span class="n">02</span><b>데이터 단절로 인한 진단 신뢰성 검증의 부재</b></div><p>입사 전 레퍼런스 체크와 입사 후 실제 동료들이 평가한 수습 기간 다면진단 결과가 서로 단절되어 있었습니다.</p><p>때문에 “입사 전 평가가 실제 입사 후 평가와도 일치하는가?”, “지인을 통한 긍정적 평가가 결과에 영향을 미치지는 않았는가?”와 같은 질문을 검증하기 어려웠고, 진단 문항과 결과 해석의 신뢰도를 지속적으로 검증·고도화할 피드백 루프도 만들기 어려웠습니다.</p><div class="fig"><div class="fbody"><div class="pipe"><span class="node"><i style="background:var(--verify)"></i>입사 전 · 레퍼런스</span><span class="ar" style="color:var(--exit);font-weight:700">✕</span><span class="node"><i style="background:var(--hire)"></i>입사 후 · 다면진단</span></div></div><div class="fcap">두 데이터 단절 · 정합성 검증 불가</div></div></div>
           <div class="item"><div class="h"><span class="n">03</span><b>진단마다 반복되는 개발과 긴 출시 리드타임</b></div><p>질문지와 분석 보고서가 고정된 형태로 하드코딩되어 있어 새로운 진단이나 보고서 포맷을 추가할 때마다 개발이 필요했습니다.</p><p>그 결과 새로운 진단을 출시하는 데 6개월~1년의 개발 기간이 필요했고, 고객 역시 새로운 진단을 접할 때마다 별도의 학습과 적응이 필요했습니다.</p><div class="fig"><div class="fbody"><div class="hbar"><span class="hl">다면 진단</span><span class="ht"><span class="hf" style="width:88%"></span></span><span class="hv">6–12개월</span></div><div class="hbar"><span class="hl">조직문화</span><span class="ht"><span class="hf" style="width:100%"></span></span><span class="hv">6–12개월</span></div><div class="hbar"><span class="hl">퇴직 리뷰</span><span class="ht"><span class="hf" style="width:74%"></span></span><span class="hv">~9개월</span></div></div><div class="fcap">신규 진단마다 하드코딩 · 매번 6–12개월</div></div></div>
 
@@ -748,7 +759,7 @@
           <div class="item"><div class="h"><span class="n">02</span><b>평가 데이터의 변별력 확보</b></div><p>응답자의 99.1%가 4~5점에 몰렸던 기존 리커트 평가를 8개 역량의 순위 기반 평가로 전환해, 역량 간 상대적인 차이가 데이터로 드러나도록 개선했습니다.</p></div>
           <div class="item"><div class="h"><span class="n">03</span><b>사례와 연결된 실질 데이터 확보</b></div><p>상·하위 역량에 구체적인 업무 사례를 연결해, 단순 점수나 그래프로는 파악하기 어려운 후보자의 강점·약점과 실제 업무 맥락을 함께 확인할 수 있도록 했습니다.</p></div>
           <nav class="pager">
-            <a class="pg prev" href="#" data-goto="1"><span class="pgd">← 이전</span><span class="pgt">진단 플랫폼 사업화</span></a>
+            <a class="pg prev" href="#" data-goto="1"><span class="pgd">← 이전</span><span class="pgt">서비스 통합 플랫폼 개발</span></a>
             <a class="pg next" href="#" data-goto="3"><span class="pgd">다음 →</span><span class="pgt">제품 개발 AX 전환</span></a>
           </nav>
         </article>
@@ -811,6 +822,18 @@
           <div class="item"><div class="h"><span class="n">01</span><b>제품 출시 리드타임 6개월 → 2개월</b></div><p>기획과 개발을 각각 1개월 스프린트로 병렬화하고 AI 프로토타이핑을 통해 검증을 앞당겨, 6개월이 걸리던 제품 출시를 2개월로 단축했습니다.</p></div>
           <div class="item"><div class="h"><span class="n">02</span><b>디자인–개발 소통 공수 90% 절감</b></div><p>Figma 기반의 디자인 정보를 AI와 코드 생성 과정에 연결하고, 컴포넌트 상태와 Spec 전달 방식을 구조화해 미팅 시간 기준 디자인–개발 소통 공수를 90% 줄였습니다.</p></div>
           <div class="item"><div class="h"><span class="n">03</span><b>디자인 시스템 상시 관리 체계 구축</b></div><p>수동으로 반복되던 디자인 시스템 관리와 전달 과정을 구조화해, 변경 사항을 빠르게 반영하고 UI 일관성을 지속적으로 유지할 수 있는 관리 체계를 구축했습니다.</p></div>
+
+          <h2 class="sec" id="d3-role">디자이너 역할의 확장</h2>
+          <p class="lead">기획 → 디자인 → 개발 → 검증이 분리된 구조에서는 디자인이 끝난 뒤 구현 단계에서 발생하는 차이를 다시 맞추는 핸드오프가 반복됐습니다. 기존 컴포넌트를 조합하는 간단한 기능조차 매번 디자인–개발 사이의 커뮤니케이션을 거쳐야 했습니다.</p>
+          <p class="lead">이를 개선하기 위해 Figma와 AI 개발 환경을 연결하고, 디자이너가 Cursor를 활용해 <strong>직접 프로토타입을 구현하고 검증하는 워크플로우</strong>를 구축했습니다. 아이디어를 빠르게 실제 동작하는 화면으로 만들고, 직접 테스트하며 스펙을 구체화한 뒤 개발로 전달하는 방식입니다.</p>
+          <p class="lead">그 결과 디자이너의 역할을 <strong>화면을 설계하고 전달하는 것에서, 직접 구현하고 검증하며 제품 완성도를 높이는 것까지 확장</strong>했습니다. 디자인과 개발 사이의 경계를 줄이고, 아이디어 → 구현 → 검증의 사이클을 짧게 반복하는 제품 개발 방식을 만들었습니다.</p>
+          <p class="lead">AI는 디자인을 대체하는 도구가 아니라 <strong>디자인과 개발 사이의 거리를 줄이는 도구</strong>로 활용했습니다. 디자이너는 구현 가능성을 더 빠르게 검증하고, 개발자는 완성된 시안이 아니라 실제 동작하는 프로토타입을 기반으로 구현하도록 협업 방식을 바꿨습니다.</p>
+          <div class="fig"><div class="fbody">
+            <div class="rolecmp">
+              <div class="rc-row"><div class="rc-lab">기존</div><div class="rc-flow"><span class="rc-node">기획</span><span class="rc-node rc-own">디자인</span><span class="rc-node">개발</span><span class="rc-node">검증</span></div></div>
+              <div class="rc-row"><div class="rc-lab">AX 이후</div><div class="rc-flow"><span class="rc-node">기획</span><span class="rc-node rc-own rc-wide">디자인 · 구현 · 검증</span><span class="rc-node">개발</span></div></div>
+            </div>
+          </div><div class="fcap">디자이너의 범위: 화면 설계·전달 → 직접 구현·검증하며 제품 완성도까지</div></div>
           <nav class="pager">
             <a class="pg prev" href="#" data-goto="2"><span class="pgd">← 이전</span><span class="pgt">평가 변별력 확보</span></a>
             <a class="pg next" href="#" data-goto="0"><span class="pgd">처음으로 →</span><span class="pgt">포트폴리오 소개</span></a>
@@ -917,7 +940,7 @@
     if (mnav) mnav.addEventListener("click", function () { side.classList.remove("collapsed"); side.classList.add("open"); });
     if (sbackdrop) sbackdrop.addEventListener("click", function () { side.classList.remove("open"); });
 
-    var CRUMB = { 0: "포트폴리오 소개", 1: "진단 플랫폼 사업화", 2: "평가 변별력 확보", 3: "제품 개발 AX 전환" };
+    var CRUMB = { 0: "포트폴리오 소개", 1: "서비스 통합 플랫폼 개발", 2: "평가 변별력 확보", 3: "제품 개발 AX 전환" };
     var docs = [].slice.call(document.querySelectorAll(".doc"));
     var links = [].slice.call(document.querySelectorAll(".side-nav a[data-goto]"));
     var toc = document.getElementById("tocNav");
