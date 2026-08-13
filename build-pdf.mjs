@@ -50,8 +50,9 @@ const overrides = `
   .s-wrap .strengths { grid-template-columns: 1fr 1fr; margin-top: 4mm; gap: 3.5mm; }
 
   /* 카드형(해결전략 / 세부 성과) */
-  .s-cards { display: grid; gap: 6mm; margin-top: 7mm; }
+  .s-cards { display: grid; gap: 6mm; margin-top: 7mm; align-self: center; width: 100%; }
   .s-cards.c1 { grid-template-columns: 1fr; max-width: 210mm; }
+  .s-cards.c2 { grid-template-columns: repeat(2, 1fr); max-width: 185mm; }
   .s-cards.c3 { grid-template-columns: repeat(3, 1fr); }
   .s-cards.c4 { grid-template-columns: repeat(2, 1fr); max-width: 220mm; }
   .s-card { border: 1px solid var(--border); border-radius: 13px; background: var(--card); padding: 6mm 6.5mm; }

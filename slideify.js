@@ -64,7 +64,7 @@
     return '<div class="s-card"><div class="s-card-h">' + (h.n ? '<span class="n">' + h.n + '</span>' : '') + '<b>' + h.b + '</b></div>' + paragraphsOf(item) + '</div>';
   }
   function cardsSlide(title, intro, items) {
-    var cols = items.length >= 4 ? 'c4' : (items.length === 1 ? 'c1' : 'c3');
+    var cols = items.length >= 4 ? 'c4' : (items.length === 1 ? 'c1' : (items.length === 2 ? 'c2' : 'c3'));
     return slide('slide-full',
       '<div class="s-eyebrow">' + title + '</div>' +
       (intro ? '<p class="s-lead">' + intro + '</p>' : '') +
@@ -123,7 +123,10 @@
           else deck.appendChild(cardsSlide(sec.title, i === 0 ? intro : '', [it]));
         });
       } else if (suffix === 'hypo') {
-        deck.appendChild(cardsSlide(sec.title, intro, sec.items));
+        var withVis = sec.items.filter(function (it) { return visualOf(it); });
+        var noVis = sec.items.filter(function (it) { return !visualOf(it); });
+        withVis.forEach(function (it, i) { deck.appendChild(splitItemSlide(sec.title, i === 0 ? intro : '', it)); });
+        if (noVis.length) deck.appendChild(cardsSlide(sec.title, withVis.length ? '' : intro, noVis));
       } else if (suffix === 'result') {
         var shot = sec.others.filter(function (o) { return o.matches('.shot'); })[0];
         var kpis = sec.others.filter(function (o) { return o.matches('.kpis'); })[0];
