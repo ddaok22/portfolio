@@ -82,8 +82,11 @@
   :root[data-theme="light"] .ic-sun { display: none; } :root[data-theme="light"] .ic-moon { display: block; }
   .btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 8px; background: var(--primary); color: var(--on-primary); font-size: 13px; font-weight: 600; border: 0; cursor: pointer; transition: opacity .12s; }
   .btn:hover { opacity: .88; } .btn.ghost { background: none; border: 1px solid var(--border); color: var(--fg); }
-  #pdfBtn { background: none; border: 1px solid var(--border); color: var(--muted); transition: background .12s, color .12s, border-color .12s; }
-  #pdfBtn:hover { background: var(--hover); color: var(--fg); border-color: var(--border2); opacity: 1; }
+  #pdfBtn, #shareBtn { background: none; border: 1px solid var(--border); color: var(--muted); transition: background .12s, color .12s, border-color .12s; }
+  #pdfBtn:hover, #shareBtn:hover { background: var(--hover); color: var(--fg); border-color: var(--border2); opacity: 1; }
+  .copytoast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(8px); background: var(--fg); color: var(--bg); font-size: 13px; font-weight: 600; padding: 10px 16px; border-radius: 10px; box-shadow: var(--shadow2); opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 300; letter-spacing: -.01em; }
+  .copytoast.on { opacity: 1; transform: translateX(-50%); }
+  @media (prefers-reduced-motion: reduce) { .copytoast { transition: opacity .18s; } }
   .mnav { display: none; width: 34px; height: 34px; border-radius: 8px; border: 0; background: none; color: var(--muted); place-items: center; cursor: pointer; margin-left: -6px; }
   .mnav:hover { color: var(--fg); }
   .sbackdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.42); z-index: 55; }
@@ -482,8 +485,8 @@
       <div class="grp">
         <div class="lbl">프로젝트</div>
         <a href="#" data-goto="1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg><span class="tx">서비스 통합 플랫폼 개발</span><span class="no">01</span></a>
-        <a href="#" data-goto="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="14" width="3" height="4"/></svg><span class="tx">평가 변별력 확보</span><span class="no">02</span></a>
-        <a href="#" data-goto="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.7 4.5L18 9.2l-4.3 1.7L12 15l-1.7-4.1L6 9.2l4.3-1.7z"/><path d="M18 15l.9 2.3L21 18l-2.1.7L18 21l-.9-2.3L15 18l2.1-.7z"/></svg><span class="tx">제품 개발 AX 전환</span><span class="no">03</span><!-- nav03 --></a>
+        <a href="#" data-goto="2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="12" y="7" width="3" height="11"/><rect x="17" y="14" width="3" height="4"/></svg><span class="tx">진단 정확도 개선</span><span class="no">02</span></a>
+        <a href="#" data-goto="3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.7 4.5L18 9.2l-4.3 1.7L12 15l-1.7-4.1L6 9.2l4.3-1.7z"/><path d="M18 15l.9 2.3L21 18l-2.1.7L18 21l-.9-2.3L15 18l2.1-.7z"/></svg><span class="tx">제품 개발 워크플로우 AX 전환</span><span class="no">03</span><!-- nav03 --></a>
       </div>
     </nav>
   </aside>
@@ -493,6 +496,7 @@
       <button class="mnav" id="mnavBtn" type="button" aria-label="메뉴 열기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
       <div class="crumb"><span class="cur" id="crumb">포트폴리오 소개</span></div>
       <span class="spacer"></span>
+      <button class="btn" id="shareBtn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5 8.6 10.5"/></svg>공유</button>
       <button class="btn" id="pdfBtn" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>PDF</button>
     </header>
 
@@ -562,8 +566,8 @@
           <p class="lead">하나의 HR 서비스를 확장하며 마주한 세 가지 문제를 담았습니다. 제품을 확장하고, 데이터를 고도화하고, 제품을 만드는 방식까지 바꾼 과정을 프로젝트별로 소개합니다.</p>
           <div class="jlist">
             <a class="jcard" href="#" data-goto="1"><span class="jn">PROJECT 01</span><b>서비스 통합 플랫폼 개발</b><p>진단 Core를 모듈화해 제품과 데이터를 확장할 수 있는 플랫폼을 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
-            <a class="jcard" href="#" data-goto="2"><span class="jn">PROJECT 02</span><b>평가 변별력 확보</b><p>점수 중심 평가를 순위 기반으로 전환해 변별력 있는 평가 데이터를 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
-            <a class="jcard" href="#" data-goto="3"><span class="jn">PROJECT 03</span><b>제품 개발 AX 전환</b><p>AI 기반 워크플로우로 디자인–개발 사이의 반복 작업을 줄이고 제품 검증 속도를 높였습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
+            <a class="jcard" href="#" data-goto="2"><span class="jn">PROJECT 02</span><b>진단 정확도 개선</b><p>점수 중심 평가를 순위 기반으로 전환해 변별력 있는 평가 데이터를 만들었습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
+            <a class="jcard" href="#" data-goto="3"><span class="jn">PROJECT 03</span><b>제품 개발 워크플로우 AX 전환</b><p>AI 기반 워크플로우로 디자인–개발 사이의 반복 작업을 줄이고 제품 검증 속도를 높였습니다.</p><span class="jgo">프로젝트 보기 →</span></a>
           </div>
         </article>
 
@@ -656,14 +660,14 @@
           <div class="item"><div class="h"><span class="n">04</span><b>데이터 신뢰성 검증 기반 확보</b></div><p>입사 전 레퍼런스 체크와 수습 종료 전 다면진단을 교차 비교할 수 있는 데이터 구조를 마련해, 진단 문항과 결과 해석의 신뢰도를 지속적으로 검증·고도화할 수 있는 기반을 확보했습니다.</p></div>
           <nav class="pager">
             <a class="pg prev" href="#" data-goto="0"><span class="pgd">← 이전</span><span class="pgt">포트폴리오 소개</span></a>
-            <a class="pg next" href="#" data-goto="2"><span class="pgd">다음 →</span><span class="pgt">평가 변별력 확보</span></a>
+            <a class="pg next" href="#" data-goto="2"><span class="pgd">다음 →</span><span class="pgt">진단 정확도 개선</span></a>
           </nav>
         </article>
 
         <!-- ============ DOC 2 ============ -->
         <article class="doc" data-doc="2">
           <div class="doc-top">
-            <div><div class="eyebrow">PROJECT <b>02</b></div><h1>평가 변별력 확보</h1><p class="desc">점수 중심 평가를 순위 기반 평가로 전환해, 후보자의 역량별 강약을 한눈에 파악하고 채용 의사결정에 필요한 정보를 제공할 수 있도록 했습니다.</p></div>
+            <div><div class="eyebrow">PROJECT <b>02</b></div><h1>진단 정확도 개선</h1><p class="desc">점수 중심 평가를 순위 기반 평가로 전환해, 후보자의 역량별 강약을 한눈에 파악하고 채용 의사결정에 필요한 정보를 제공할 수 있도록 했습니다.</p></div>
           </div>
           <div class="kws"><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>기획~런칭 전 과정 주도</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>데이터 기반 UX 설계·개선</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>사용자 중심 문제 정의</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>정량적 근거 기반</span></div>
 
@@ -776,14 +780,14 @@
           <div class="item"><div class="h"><span class="n">03</span><b>사례와 연결된 실질 데이터 확보</b></div><p>상·하위 역량에 구체적인 업무 사례를 연결해, 단순 점수나 그래프로는 파악하기 어려운 후보자의 강점·약점과 실제 업무 맥락을 함께 확인할 수 있도록 했습니다.</p></div>
           <nav class="pager">
             <a class="pg prev" href="#" data-goto="1"><span class="pgd">← 이전</span><span class="pgt">서비스 통합 플랫폼 개발</span></a>
-            <a class="pg next" href="#" data-goto="3"><span class="pgd">다음 →</span><span class="pgt">제품 개발 AX 전환</span></a>
+            <a class="pg next" href="#" data-goto="3"><span class="pgd">다음 →</span><span class="pgt">제품 개발 워크플로우 AX 전환</span></a>
           </nav>
         </article>
 
         <!-- ============ DOC 3 ============ -->
         <article class="doc" data-doc="3">
           <div class="doc-top">
-            <div><div class="eyebrow">PROJECT <b>03</b></div><h1>제품 개발 AX 전환</h1><p class="desc">AI 기반 워크플로우를 구축해 디자인과 개발 사이의 반복 작업을 줄이고, 스프린트 주기를 단축해 제품 개발 속도를 높였습니다.</p></div>
+            <div><div class="eyebrow">PROJECT <b>03</b></div><h1>제품 개발 워크플로우 AX 전환</h1><p class="desc">AI 기반 워크플로우를 구축해 디자인과 개발 사이의 반복 작업을 줄이고, 스프린트 주기를 단축해 제품 개발 속도를 높였습니다.</p></div>
           </div>
           <div class="kws"><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>기획~런칭 전 과정 주도</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>디자인 시스템 구축·운영</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Figma·AI 협업 도구 활용</span><span class="kw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>직군 간 협업 리드</span></div>
 
@@ -851,7 +855,7 @@
             </div>
           </div><div class="fcap">디자이너의 범위: 화면 설계·전달 → 직접 구현·검증하며 제품 완성도까지</div></div>
           <nav class="pager">
-            <a class="pg prev" href="#" data-goto="2"><span class="pgd">← 이전</span><span class="pgt">평가 변별력 확보</span></a>
+            <a class="pg prev" href="#" data-goto="2"><span class="pgd">← 이전</span><span class="pgt">진단 정확도 개선</span></a>
             <a class="pg next" href="#" data-goto="0"><span class="pgd">처음으로 →</span><span class="pgt">포트폴리오 소개</span></a>
           </nav>
         </article>
@@ -956,7 +960,7 @@
     if (mnav) mnav.addEventListener("click", function () { side.classList.remove("collapsed"); side.classList.add("open"); });
     if (sbackdrop) sbackdrop.addEventListener("click", function () { side.classList.remove("open"); });
 
-    var CRUMB = { 0: "포트폴리오 소개", 1: "서비스 통합 플랫폼 개발", 2: "평가 변별력 확보", 3: "제품 개발 AX 전환" };
+    var CRUMB = { 0: "포트폴리오 소개", 1: "서비스 통합 플랫폼 개발", 2: "진단 정확도 개선", 3: "제품 개발 워크플로우 AX 전환" };
     var docs = [].slice.call(document.querySelectorAll(".doc"));
     var links = [].slice.call(document.querySelectorAll(".side-nav a[data-goto]"));
     var toc = document.getElementById("tocNav");
@@ -1006,6 +1010,24 @@
       a.href = "portfolio.pdf"; a.download = "차윤건_포트폴리오.pdf";
       document.body.appendChild(a); a.click(); a.remove();
     });
+
+    // 공유(링크 복사)
+    var shareBtn = document.getElementById("shareBtn");
+    if (shareBtn) {
+      var SHARE_URL = "https://portfolio-two-lac-3kj8qznufj.vercel.app/";
+      var ctoast = document.createElement("div"); ctoast.className = "copytoast"; document.body.appendChild(ctoast);
+      var ctimer;
+      function showCopyToast(msg) { ctoast.textContent = msg; ctoast.classList.add("on"); clearTimeout(ctimer); ctimer = setTimeout(function () { ctoast.classList.remove("on"); }, 1700); }
+      function legacyCopy() {
+        try { var ta = document.createElement("textarea"); ta.value = SHARE_URL; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.focus(); ta.select(); document.execCommand("copy"); ta.remove(); showCopyToast("링크가 복사되었습니다"); }
+        catch (e) { showCopyToast("복사 실패 · 주소창의 링크를 복사해주세요"); }
+      }
+      shareBtn.addEventListener("click", function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(SHARE_URL).then(function () { showCopyToast("링크가 복사되었습니다"); }).catch(legacyCopy);
+        } else { legacyCopy(); }
+      });
+    }
 
     show(0);
   })();
