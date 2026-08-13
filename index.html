@@ -385,8 +385,10 @@
   @media (max-width: 520px) { .pager { flex-direction: column; } .pg.next { align-items: flex-start; text-align: left; } }
 
   /* ── 용어 사전(툴팁) ── */
-  .term { border-bottom: 1px dashed var(--border2); cursor: help; transition: color .12s, border-color .12s; }
-  .term:hover, .term:focus-visible { color: var(--fg); border-bottom-color: var(--faint); outline: none; }
+  .term { cursor: help; text-decoration: underline; text-decoration-style: dotted;
+    text-decoration-color: color-mix(in srgb, var(--fg) 45%, transparent); text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px; transition: text-decoration-color .12s, color .12s; }
+  .term:hover, .term:focus-visible { color: var(--fg); text-decoration-color: var(--fg); outline: none; }
   .term:focus-visible { border-radius: 2px; box-shadow: 0 0 0 2px color-mix(in srgb, var(--fg) 22%, transparent); }
   .glosstip { position: fixed; z-index: 200; max-width: 264px; background: var(--fg); color: var(--bg); font-size: 12.5px; line-height: 1.55; padding: 10px 12px; border-radius: 11px; box-shadow: var(--shadow2); letter-spacing: -.01em; opacity: 0; transform: translateY(3px); pointer-events: none; transition: opacity .13s ease, transform .13s ease; }
   .glosstip.on { opacity: 1; transform: none; }
