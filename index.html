@@ -26,6 +26,14 @@
   .wordmark { font-size: 16px; font-weight: 800; letter-spacing: -0.03em; }
   .lnav { display: flex; align-items: center; gap: 22px; font-size: 13.5px; color: var(--muted); }
   .lnav a { transition: color .15s; } .lnav a:hover { color: var(--fg); }
+  .lmeta { display: flex; align-items: center; gap: 14px; font-size: 12.5px; color: var(--muted); }
+  .lmeta .sep2 { color: var(--border2); }
+  .lmeta .clock { font-variant-numeric: tabular-nums; letter-spacing: 0.03em; min-width: 62px; }
+  .avail { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 10px; border: 1px solid var(--border); border-radius: 999px; color: var(--fg); font-weight: 600; font-size: 12px; letter-spacing: -0.01em; }
+  .avail .adot { width: 7px; height: 7px; border-radius: 50%; background: #34D399; position: relative; }
+  .avail .adot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 0 rgba(52,211,153,.5); animation: adot 2.2s ease-out infinite; }
+  @keyframes adot { 0% { box-shadow: 0 0 0 0 rgba(52,211,153,.5); } 70% { box-shadow: 0 0 0 7px rgba(52,211,153,0); } 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); } }
+  @media (prefers-reduced-motion: reduce) { .avail .adot::after { animation: none; } }
 
   .hero { position: relative; z-index: 5; height: 100%; display: flex; align-items: center; padding: 0 clamp(20px, 5vw, 56px); }
   .hero-in { max-width: 720px; }
@@ -53,6 +61,7 @@
     .veil { background: linear-gradient(0deg, var(--bg) 6%, color-mix(in srgb, var(--bg) 60%, transparent) 46%, color-mix(in srgb, var(--bg) 30%, transparent) 100%); }
     .lnav { gap: 16px; }
     .lnav a:last-child { display: none; }
+    .lmeta { gap: 0; } .lmeta .loc, .lmeta .sep2, .lmeta .clock { display: none; }
     .foothint { display: none; }
   }
   @media (prefers-reduced-motion: reduce) { .badge .dot { animation: none; } }
@@ -73,6 +82,12 @@
 
   <header class="lhead">
     <div class="wordmark">차윤건</div>
+    <div class="lmeta">
+      <span class="loc">Seoul, Korea</span>
+      <span class="sep2">·</span>
+      <span class="clock" id="clock">--:--:--</span>
+      <span class="avail"><span class="adot"></span>Open to work</span>
+    </div>
   </header>
 
   <main class="hero">
@@ -225,6 +240,21 @@
     });
     document.addEventListener('mouseleave', function () { dot.style.opacity = '0'; });
     document.addEventListener('mouseenter', function () { dot.style.opacity = '1'; });
+  })();
+
+  // ── 실시간 서울 시각 ──
+  (function () {
+    var clock = document.getElementById('clock');
+    if (!clock) return;
+    function tick() {
+      try {
+        clock.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false });
+      } catch (e) {
+        clock.textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
+      }
+    }
+    tick();
+    setInterval(tick, 1000);
   })();
   </script>
 </body>
