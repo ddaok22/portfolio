@@ -20,7 +20,7 @@
         '<div class="cv-eyebrow">PORTFOLIO · AX PRODUCT DESIGN</div>' +
         '<h1 class="cv-name">차윤건</h1>' +
         '<div class="cv-role">HR SaaS 프로덕트 디자이너</div>' +
-        '<p class="cv-desc">레퍼런스 체크를 시작으로 진단·분석 플랫폼까지<br>HR SaaS를 확장해왔습니다.</p>' +
+        '<p class="cv-desc">레퍼런스 체크를 시작으로 진단·분석 플랫폼까지<br>HR SaaS를 도메인으로 작업해오고 있습니다.</p>' +
       '</div>' +
       '<div class="cv-side">' +
         '<div class="cv-meta">' +
