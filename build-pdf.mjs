@@ -3,7 +3,7 @@
 // 가로 슬라이드로 재조립 → 헤드리스 크롬으로 portfolio.pdf 렌더.
 import fs from 'fs';
 
-const src = fs.readFileSync('index.html', 'utf8');
+const src = fs.readFileSync('work.html', 'utf8');
 const css = src.match(/<style>([\s\S]*?)<\/style>/)[1];
 const articles = src.match(/<main class="content">([\s\S]*?)<\/main>/)[1];
 const slideify = fs.readFileSync('slideify.js', 'utf8');
