@@ -396,6 +396,14 @@
   .glosstip::after { content: ""; position: absolute; left: var(--ax, 50%); bottom: -5px; width: 10px; height: 10px; background: var(--fg); transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
   .glosstip.below::after { bottom: auto; top: -5px; }
   @media (prefers-reduced-motion: reduce) { .glosstip { transition: none; } }
+  /* 용어 사전 최초 안내 */
+  .glosshint { display: flex; align-items: center; gap: 10px; margin: 0 0 26px; padding: 11px 12px 11px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--subtle); font-size: 13px; color: var(--muted); }
+  .glosshint .ghi { font-size: 15px; line-height: 1; flex-shrink: 0; }
+  .glosshint .ght { flex: 1; line-height: 1.5; }
+  .glosshint .ght b { color: var(--fg); font-weight: 600; border-bottom: 1.5px dotted color-mix(in srgb, var(--fg) 45%, transparent); }
+  .glosshint .ghx { flex-shrink: 0; border: 0; background: none; color: var(--faint); cursor: pointer; font-size: 13px; line-height: 1; padding: 4px 5px; border-radius: 6px; }
+  .glosshint .ghx:hover { color: var(--fg); background: var(--hover); }
+  .glosshint.hide { display: none; }
 
   /* ── PDF(인쇄) 전용 레이아웃 ── */
   .printfoot { display: none; }
@@ -1091,6 +1099,25 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") hide(); });
     window.addEventListener("scroll", function () { if (cur) hide(); }, true);
     window.addEventListener("resize", function () { if (cur) hide(); });
+
+    // 최초 방문 안내 힌트(용어 사전 사용법)
+    (function () {
+      var off = false; try { off = localStorage.getItem("pf-gloss-hint") === "off"; } catch (e) {}
+      var content = document.querySelector(".content");
+      if (off || !content) return;
+      var gh = document.createElement("div"); gh.className = "glosshint";
+      var ic = document.createElement("span"); ic.className = "ghi"; ic.textContent = "💡";
+      var tx = document.createElement("span"); tx.className = "ght";
+      tx.innerHTML = "<b>밑줄 친 용어</b>에 마우스를 올리면(모바일은 탭) 쉬운 설명을 볼 수 있어요.";
+      var xb = document.createElement("button"); xb.className = "ghx"; xb.type = "button";
+      xb.setAttribute("aria-label", "안내 닫기"); xb.textContent = "✕";
+      gh.appendChild(ic); gh.appendChild(tx); gh.appendChild(xb);
+      content.insertBefore(gh, content.firstChild);
+      xb.addEventListener("click", function () {
+        gh.classList.add("hide");
+        try { localStorage.setItem("pf-gloss-hint", "off"); } catch (e) {}
+      });
+    })();
   })();
 </script>
 </body>
