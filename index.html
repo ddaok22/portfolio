@@ -97,21 +97,32 @@
   <header class="lhead">
     <div class="wordmark"><span class="avatar" role="img" aria-label="차윤건 프로필 사진" oncontextmenu="return false"></span></div>
     <div class="lmeta">
-      <span class="loc">Bundang, Korea</span>
+      <span class="loc" data-i18n="loc">Bundang, Korea</span>
       <span class="sep2">·</span>
       <span class="clock" id="clock">--:--:--</span>
-      <span class="avail"><span class="adot"></span>Open to work</span>
+      <span class="avail"><span class="adot"></span><span data-i18n="avail">Open to work</span></span>
+    </div>
+    <div class="langsel">
+      <button class="langbtn" id="langBtn" type="button" aria-haspopup="true" aria-expanded="false"><span id="langCur">한국어</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="langmenu" id="langMenu" role="menu">
+        <button type="button" data-lang="ko">한국어</button>
+        <button type="button" data-lang="en">English</button>
+        <button type="button" data-lang="ja">日本語</button>
+        <button type="button" data-lang="zh">中文</button>
+        <button type="button" data-lang="es">Español</button>
+        <button type="button" data-lang="fr">Français</button>
+      </div>
     </div>
   </header>
 
   <main class="hero">
     <div class="hero-in">
-      <div class="eyebrow2">Domain</div>
-      <h1 class="headline">HR SaaS<br>Product Designer<br>Korea</h1>
-      <p class="sub">형태는 기능을 따르는 제품을 만듭니다.</p>
+      <div class="eyebrow2" data-i18n="domain">Domain</div>
+      <h1 class="headline">HR SaaS<br><span data-i18n="role">Product Designer</span><br><span data-i18n="country">Korea</span></h1>
+      <p class="sub" data-i18n="sub">형태는 기능을 따르는 제품을 만듭니다.</p>
       <div class="cta">
-        <a class="btn primary" href="work.html">포트폴리오 보기 <span>→</span></a>
-        <a class="btn ghost" href="portfolio.pdf" download="차윤건_포트폴리오.pdf">PDF 내려받기 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></a>
+        <a class="btn primary" href="work.html"><span data-i18n="cta1">포트폴리오 보기</span> <span>→</span></a>
+        <a class="btn ghost" href="portfolio.pdf" download="차윤건_포트폴리오.pdf"><span data-i18n="cta2">PDF 내려받기</span> <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></a>
       </div>
     </div>
   </main>
@@ -306,6 +317,44 @@
     }
     tick();
     setInterval(tick, 1000);
+  })();
+
+  // ── 다국어(i18n) ──
+  (function () {
+    var I18N = {
+      ko: { domain: "도메인", role: "프로덕트 디자이너", country: "대한민국", sub: "형태는 기능을 따르는 제품을 만듭니다.", cta1: "포트폴리오 보기", cta2: "PDF 내려받기", loc: "분당, 대한민국", avail: "채용 제안 환영" },
+      en: { domain: "Domain", role: "Product Designer", country: "Korea", sub: "Products where form follows function.", cta1: "View Portfolio", cta2: "Download PDF", loc: "Bundang, Korea", avail: "Open to work" },
+      ja: { domain: "ドメイン", role: "プロダクトデザイナー", country: "韓国", sub: "「形は機能に従う」製品をつくります。", cta1: "ポートフォリオを見る", cta2: "PDFをダウンロード", loc: "盆唐, 韓国", avail: "お仕事募集中" },
+      zh: { domain: "领域", role: "产品设计师", country: "韩国", sub: "形式追随功能，做从功能出发的产品。", cta1: "查看作品集", cta2: "下载 PDF", loc: "盆唐, 韩国", avail: "求职中" },
+      es: { domain: "Dominio", role: "Diseñador de Producto", country: "Corea", sub: "Productos donde la forma sigue a la función.", cta1: "Ver portafolio", cta2: "Descargar PDF", loc: "Bundang, Corea", avail: "Disponible para trabajar" },
+      fr: { domain: "Domaine", role: "Designer Produit", country: "Corée", sub: "Des produits où la forme suit la fonction.", cta1: "Voir le portfolio", cta2: "Télécharger le PDF", loc: "Bundang, Corée", avail: "Ouvert aux opportunités" }
+    };
+    var NAMES = { ko: "한국어", en: "English", ja: "日本語", zh: "中文", es: "Español", fr: "Français" };
+    var lang = "ko";
+    try {
+      var sv = localStorage.getItem("pf-lang");
+      if (sv && I18N[sv]) lang = sv;
+      else { var bl = (navigator.language || "ko").slice(0, 2).toLowerCase(); if (I18N[bl]) lang = bl; }
+    } catch (e) {}
+    var curEl = document.getElementById("langCur");
+    var btn = document.getElementById("langBtn"), menu = document.getElementById("langMenu");
+    function apply(l) {
+      if (!I18N[l]) l = "ko";
+      lang = l; var d = I18N[l];
+      document.documentElement.lang = l;
+      [].forEach.call(document.querySelectorAll("[data-i18n]"), function (el) {
+        var k = el.getAttribute("data-i18n"); if (d[k] != null) el.textContent = d[k];
+      });
+      if (curEl) curEl.textContent = NAMES[l];
+      if (menu) [].forEach.call(menu.querySelectorAll("button"), function (b) { b.classList.toggle("on", b.getAttribute("data-lang") === l); });
+      try { localStorage.setItem("pf-lang", l); } catch (e) {}
+    }
+    if (btn && menu) {
+      btn.addEventListener("click", function (e) { e.stopPropagation(); var o = menu.classList.toggle("open"); btn.setAttribute("aria-expanded", o ? "true" : "false"); });
+      document.addEventListener("click", function (e) { if (!menu.contains(e.target) && !btn.contains(e.target)) { menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); } });
+      [].forEach.call(menu.querySelectorAll("button"), function (b) { b.addEventListener("click", function () { apply(b.getAttribute("data-lang")); menu.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); }); });
+    }
+    apply(lang);
   })();
   </script>
 </body>
