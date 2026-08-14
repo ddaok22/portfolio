@@ -66,7 +66,8 @@
   .btn.primary:hover { transform: translateY(-2px); }
   .btn.primary span { transition: transform .18s ease; } .btn.primary:hover span { transform: translateX(4px); }
   .btn.ghost { border: 1px solid var(--border2); color: var(--fg); }
-  .btn.ghost:hover { background: color-mix(in srgb, var(--card) 70%, transparent); border-color: var(--muted); }
+  .btn.ghost:hover { background: color-mix(in srgb, var(--card) 70%, transparent); border-color: var(--muted); transform: translateY(-2px); }
+  .btn.ghost svg { transition: transform .18s ease; } .btn.ghost:hover svg { transform: translateY(3px); }
 
   .foothint { position: fixed; left: clamp(20px, 5vw, 56px); bottom: 26px; z-index: 5; display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--faint); }
   .foothint .l { width: 30px; height: 1px; background: var(--border2); }
