@@ -25,9 +25,8 @@
   .lhead { position: fixed; top: 0; left: 0; right: 0; z-index: 5; height: 68px; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(20px, 5vw, 56px); }
   .wordmark { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 800; letter-spacing: -0.03em; }
   .avatar { width: 36px; height: 36px; aspect-ratio: 1 / 1; border-radius: 50%; overflow: hidden; flex-shrink: 0; display: block;
-    background: url('profile.jpg') center center / cover no-repeat, var(--card);
-    border: 2px solid rgba(255,255,255,0.34);
-    box-shadow: 0 4px 14px -6px rgba(0,0,0,0.5);
+    background: var(--card);
+    border: 2px solid rgba(255,255,255,0.18);
     -webkit-user-drag: none; user-select: none; -webkit-user-select: none; }
   .lnav { display: flex; align-items: center; gap: 22px; font-size: 13.5px; color: var(--muted); }
   .lnav a { transition: color .15s; } .lnav a:hover { color: var(--fg); }
