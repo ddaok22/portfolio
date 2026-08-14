@@ -8,7 +8,7 @@
 <style>
   :root {
     --bg: #1B1B1E; --fg: #FAFAFA; --muted: #A7A7AE; --faint: #7C7C84;
-    --border: #34343A; --border2: #4A4A52; --card: #232327;
+    --border: #34343A; --border2: #4A4A52; --card: #232327; --accent: #6ADD88;
     --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
   }
   * { box-sizing: border-box; }
@@ -57,6 +57,7 @@
 
   .eyebrow2 { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--faint); margin-bottom: 20px; }
   .headline { margin: 0; font-size: clamp(2.4rem, 5.8vw, 4.1rem); font-weight: 780; line-height: 1.08; letter-spacing: -0.04em; }
+  .accent-dot { color: var(--accent); }
   .sub { margin: 22px 0 0; font-size: clamp(15px, 1.7vw, 18px); line-height: 1.7; color: var(--muted); max-width: 32em; }
   .sub b { color: var(--fg); font-weight: 650; }
 
@@ -119,7 +120,7 @@
   <main class="hero">
     <div class="hero-in">
       <div class="eyebrow2" data-i18n="domain">Domain</div>
-      <h1 class="headline">HR SaaS<br><span data-i18n="role">Product Designer</span><br><span data-i18n="country">Korea</span></h1>
+      <h1 class="headline">HR SaaS<br><span data-i18n="role">Product Designer</span><br><span data-i18n="country">Korea</span><span class="accent-dot">.</span></h1>
       <p class="sub" data-i18n="sub">형태가 기능을 따를 수 있도록 만듭니다.</p>
       <div class="cta">
         <a class="btn primary" href="work.html"><span data-i18n="cta1">포트폴리오 보기</span> <span>→</span></a>
