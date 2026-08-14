@@ -87,6 +87,8 @@
   #pdfBtn, #shareBtn { background: none; border: 1px solid var(--border); color: var(--muted); transition: background .12s, color .12s, border-color .12s; }
   #pdfBtn:hover, #shareBtn:hover { background: var(--hover); color: var(--fg); border-color: var(--border2); opacity: 1; }
   /* 브레드크럼 드롭다운(모바일 전용 동작) */
+  .crumb .grp { background: none; border: 0; padding: 0; margin: 0; font: inherit; color: var(--muted); font-weight: 700; cursor: pointer; transition: color .12s; }
+  .crumb .grp:hover { color: var(--fg); }
   .curbtn { display: inline-flex; align-items: center; gap: 4px; min-width: 0; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: inherit; cursor: default; }
   .crumbchev { display: none; flex-shrink: 0; color: var(--faint); }
   .crumbmenu { position: absolute; left: 0; top: 46px; min-width: 220px; max-width: 78vw; background: var(--card); border: 1px solid var(--border); border-radius: 11px; padding: 5px; box-shadow: var(--shadow2); display: none; flex-direction: column; z-index: 45; }
@@ -371,6 +373,7 @@
     #shareBtn, #pdfBtn { display: none; }
     .curbtn { cursor: pointer; }
     .crumbchev { display: inline-flex; }
+    .crumb .crumbseg { display: none; } /* 홈·그룹·구분선 숨기고 현재 위치만 */
   }
   /* 소개(개요) 페이지 */
   .plist { display: grid; grid-template-columns: 1fr; gap: var(--g); margin-top: 16px; }
@@ -528,13 +531,8 @@
   <div class="main">
     <header class="topbar">
       <button class="mnav" id="mnavBtn" type="button" aria-label="메뉴 열기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg></button>
-      <div class="crumb"><a href="index.html" class="home" aria-label="홈으로">홈</a><span class="sep">/</span><button class="curbtn" id="crumbBtn" type="button" aria-haspopup="true" aria-expanded="false"><span class="cur" id="crumb">포트폴리오 소개</span><svg class="crumbchev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
-        <div class="crumbmenu" id="crumbMenu" role="menu">
-          <button type="button" data-goto="0">포트폴리오 소개</button>
-          <button type="button" data-goto="1">서비스 통합 플랫폼 개발</button>
-          <button type="button" data-goto="2">진단 신뢰도 개선</button>
-          <button type="button" data-goto="3">제품 개발 워크플로우 AX 전환</button>
-        </div>
+      <div class="crumb"><a href="index.html" class="home crumbseg" aria-label="홈으로">홈</a><span class="sep crumbseg">/</span><button class="grp crumbseg" id="crumbGrp" type="button">소개</button><span class="sep crumbseg">/</span><button class="curbtn" id="crumbBtn" type="button" aria-haspopup="true" aria-expanded="false"><span class="cur" id="crumb">포트폴리오 소개</span><svg class="crumbchev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="crumbmenu" id="crumbMenu" role="menu"></div>
       </div>
       <span class="spacer"></span>
       <div class="moreP">
@@ -1057,17 +1055,39 @@
       active = n;
       docs.forEach(function (d) { d.classList.toggle("on", d.getAttribute("data-doc") == active); });
       links.forEach(function (a) { a.classList.toggle("on", a.getAttribute("data-goto") == active); });
-      if (crumb) crumb.textContent = CRUMB[active] || "";
-      if (crumbMenu) { crumbMenu.classList.remove("open"); [].forEach.call(crumbMenu.querySelectorAll("button"), function (b) { b.classList.toggle("on", b.getAttribute("data-goto") == active); }); }
-      if (crumbBtn) crumbBtn.setAttribute("aria-expanded", "false");
+      if (crumb) { crumb.textContent = CRUMB[active] || ""; crumb.setAttribute("data-ko", CRUMB[active] || ""); }
+      rebuildCrumb();
+      if (window.__pfSyncDyn) window.__pfSyncDyn(); // 현재 언어로 브레드크럼 재번역
       buildToc();
       if (isMobile()) side.classList.remove("open");
       window.scrollTo({ top: 0, behavior: "smooth" }); spy();
     }
     document.querySelectorAll("[data-goto]").forEach(function (a) { a.addEventListener("click", function (e) { e.preventDefault(); show(+a.getAttribute("data-goto")); }); });
-    // 모바일 상단바: 브레드크럼 드롭다운 + ⋯ 오버플로 메뉴
+    // 모바일 상단바: 브레드크럼(축약형·상위경로 드롭다운) + ⋯ 오버플로 메뉴
     var crumbBtn = document.getElementById("crumbBtn"), crumbMenu = document.getElementById("crumbMenu");
+    var crumbGrp = document.getElementById("crumbGrp");
     var moreBtn = document.getElementById("moreBtn"), moreMenu = document.getElementById("moreMenu");
+    function grpFirst() { return active === 0 ? 0 : 1; }         // 소개→0, 프로젝트→1
+    // 경로: 홈 / <그룹> / 현재. 모바일은 현재만 보이고, 펼치면 상위(홈·그룹)를 순서대로.
+    function rebuildCrumb() {
+      var homeEl = document.querySelector(".crumb .home");
+      var lbls = document.querySelectorAll(".side-nav .lbl");
+      var gi = active === 0 ? 0 : 1;
+      var grpText = lbls[gi] ? lbls[gi].textContent.trim() : "";
+      if (crumbGrp) crumbGrp.textContent = grpText;
+      if (!crumbMenu) return;
+      crumbMenu.classList.remove("open");
+      if (crumbBtn) crumbBtn.setAttribute("aria-expanded", "false");
+      crumbMenu.innerHTML = "";
+      var b1 = document.createElement("button"); b1.type = "button";
+      b1.textContent = homeEl ? homeEl.textContent.trim() : "홈";
+      b1.addEventListener("click", function () { window.location.href = "index.html"; });
+      var b2 = document.createElement("button"); b2.type = "button"; b2.textContent = grpText;
+      b2.addEventListener("click", function () { crumbMenu.classList.remove("open"); if (crumbBtn) crumbBtn.setAttribute("aria-expanded", "false"); show(grpFirst()); });
+      crumbMenu.appendChild(b1); crumbMenu.appendChild(b2);
+    }
+    window.__rebuildCrumb = rebuildCrumb; // 언어 전환 후 i18n이 재호출
+    if (crumbGrp) crumbGrp.addEventListener("click", function () { show(grpFirst()); });
     if (crumbBtn && crumbMenu) {
       crumbBtn.addEventListener("click", function (e) {
         if (!window.matchMedia("(max-width: 767px)").matches) return; // 데스크톱은 일반 텍스트
@@ -1295,7 +1315,7 @@
     // 2차: 클래스 없어도 사전에 있는 문자열이면 어디서든 번역(목업 라벨·main 밖 힌트 등)
     [].forEach.call(document.querySelectorAll("body *"), function (el) {
       if (seen.indexOf(el) !== -1) return;
-      if (el.closest("script,style,#tocNav,#langMenuP,#langMenu")) return;
+      if (el.closest("script,style,#tocNav,#langMenuP,#langMenu,#crumb,#crumbGrp,#crumbMenu")) return;
       var c = el.children, ck = false;
       for (var i = 0; i < c.length; i++) { if (K.test(c[i].textContent)) { ck = true; break; } }
       if (ck) return;
@@ -1311,12 +1331,13 @@
     }
     function refreshDyn() {
       var cr = document.getElementById("crumb");
-      if (cr && lang !== "ko") { var t = tr(cr.textContent.replace(/\s+/g, " ").trim()); if (t != null) cr.textContent = t; }
+      if (cr) { var ko = cr.getAttribute("data-ko") || cr.textContent.replace(/\s+/g, " ").trim(); cr.textContent = (lang === "ko") ? ko : (tr(ko) || ko); }
       [].forEach.call(document.querySelectorAll("#tocNav a"), function (a) {
         var id = a.getAttribute("data-id"); var h = id && document.getElementById(id);
         if (h) a.textContent = h.textContent.trim();
       });
     }
+    window.__pfSyncDyn = refreshDyn; // 문서 전환 시 SPA가 호출(현재 언어로 크럼브 재번역)
     var gloss = null;
     function apply(l) {
       if (!NAMES[l]) l = "ko";
@@ -1328,6 +1349,7 @@
         else { var t = tr(it[2]); var val = (t != null) ? t : it[2]; if (it[3]) setKeepIcon(el, val); else el.textContent = val; }
       });
       refreshDyn();
+      if (window.__rebuildCrumb) window.__rebuildCrumb(); // 브레드크럼 그룹·상위경로 언어 동기화
       gloss = gloss || document.querySelector(".glosshint");
       if (gloss) gloss.style.display = (l !== "ko") ? "none" : "";
       var cur = document.getElementById("langCurP"); if (cur) cur.textContent = NAMES[l];
